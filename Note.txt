@@ -1,0 +1,32 @@
+for overall fuctionalities check docs folder
+
+
+Done functionalities
+
+1) Customer Login
+2) Register
+3) View products
+4) Add to cart
+5) View Contacts
+
+Pending fuctionalities
+
+1) Customer
+	- i) Update Password
+	ii) Checkout Order
+	iii) View Order & status
+	iv) Add products
+	
+	
+2) Admin
+	- i) Login
+	ii) View Orders
+	iii) Add Driver
+	iv) Assign order to Driver
+
+3) Driver
+	- i) Login
+	ii) View Orders
+	iii) Update Status
+	
+	
