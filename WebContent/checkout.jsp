@@ -36,7 +36,7 @@ private CustomerDao customerDao;
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-<title>Checkout | E-Shopper</title>
+<title>Checkout | Online Agree Pet Zone</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <link href="css/prettyPhoto.css" rel="stylesheet">
@@ -45,7 +45,7 @@ private CustomerDao customerDao;
 <link href="css/main.css" rel="stylesheet">
 <link href="css/responsive.css" rel="stylesheet">
 
-<link rel="shortcut icon" href="images/ico/favicon.ico">
+<link rel="shortcut icon" href="images/icon.jpg">
 <link rel="apple-touch-icon-precomposed" sizes="144x144"
 	href="images/ico/apple-touch-icon-144-precomposed.png">
 <link rel="apple-touch-icon-precomposed" sizes="114x114"
@@ -64,9 +64,7 @@ private CustomerDao customerDao;
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-4">
-						<div class="logo pull-left">
-							<a href="index.html"><img src="images/home/logo.png" alt="" /></a>
-						</div>
+						<%@include file="icon.jsp" %>
 					</div>
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">

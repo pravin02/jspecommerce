@@ -61,7 +61,7 @@ private CustomerDao customerDao;
     <script src="js/html5shiv.js"></script>
     <script src="js/respond.min.js"></script>
     <![endif]-->
-<link rel="shortcut icon" href="images/ico/favicon.ico">
+<link rel="shortcut icon" href="images/icon.jpg">
 <link rel="apple-touch-icon-precomposed" sizes="144x144"
 	href="images/ico/apple-touch-icon-144-precomposed.png">
 <link rel="apple-touch-icon-precomposed" sizes="114x114"
@@ -82,9 +82,7 @@ private CustomerDao customerDao;
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-4">
-						<div class="logo pull-left">
-							<a href="index.html"><img src="images/home/logo.png" alt="" /></a>
-						</div>
+						<%@include file="icon.jsp" %>
 
 					</div>
 					<div class="col-sm-8">
