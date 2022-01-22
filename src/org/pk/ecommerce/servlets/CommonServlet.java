@@ -41,7 +41,7 @@ public class CommonServlet extends HttpServlet {
 		}
 
 		// farmer login action
-		if (action.equalsIgnoreCase("farmerLogin")) {
+		if (action.equalsIgnoreCase("login")) {
 			String emailId = request.getParameter("emailId");
 			String password = request.getParameter("password");
 			User user = commonDao.loginFarmerUser(emailId, password);
@@ -63,8 +63,24 @@ public class CommonServlet extends HttpServlet {
 			User user = commonDao.loginDriverUser(emailId, password);
 			doActionLogin(request, response, user);
 		}
+
+		// User Profile update
+		if (action.equalsIgnoreCase("updateUser")) {
+			User user = doActionUserUpdate(request, response);
+			HttpSession session = request.getSession();			
+			session.setAttribute(GlobalConstants.USER_DETAILS, user);
+			response.sendRedirect("userProfile.jsp");
+
+		}
 	}
 
+	/**
+	 * 
+	 * @param request
+	 * @param response
+	 * @param user
+	 * @throws IOException
+	 */
 	public void doActionLogin(HttpServletRequest request, HttpServletResponse response, User user) throws IOException {
 		if (user != null) {
 			System.out.println(" login : user=>" + user.getType().name());
@@ -73,11 +89,17 @@ public class CommonServlet extends HttpServlet {
 			response.sendRedirect("index.jsp");
 		} else {
 			String action = request.getParameter("action");
-			response.sendRedirect(action+".jsp?failed=Invalid Username or Password");
+			response.sendRedirect(action + ".jsp?failed=Invalid Username or Password");
 
 		}
 	}
 
+	/**
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws IOException
+	 */
 	public void doActionRegisterUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String MESSAGE = "";
 		User user = fillUserDetails(request);
@@ -93,6 +115,11 @@ public class CommonServlet extends HttpServlet {
 		response.sendRedirect("login.jsp?register=" + MESSAGE);
 	}
 
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 */
 	public User fillUserDetails(HttpServletRequest request) {
 		String emailId = request.getParameter("emailId");
 		String password = request.getParameter("password");
@@ -109,4 +136,37 @@ public class CommonServlet extends HttpServlet {
 		user.setDob(dob);
 		return user;
 	}
+
+	/**
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	public User doActionUserUpdate(HttpServletRequest request, HttpServletResponse response) {		
+		System.out.println("emai id ="+request.getParameter("emailId"));
+		
+		String emailId = request.getParameter("emailId");
+		String mobileNo = request.getParameter("mobileNumber");
+
+		String oldPassword = request.getParameter("oldPassword");
+		String newPassword = request.getParameter("newPassword");
+		String confirmPassword = request.getParameter("confirmPassword");
+
+		User user = new User();
+		user.setEmailId(emailId);
+		user.setMobileNo(mobileNo);
+
+		user.setOldPassword(oldPassword);
+		user.setNewPassword(newPassword);
+		user.setConfirmPassword(confirmPassword);
+
+		this.commonDao.updatePassword(emailId, oldPassword, newPassword);
+		user = this.commonDao.getUserByUserId(emailId);
+		
+		System.out.println(user);
+
+		return user;
+	}
+
 }

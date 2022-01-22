@@ -14,6 +14,9 @@ public class User {
 	private String dob;
 	private String mobileNo;
 	private UserType type;
+	private String oldPassword;
+	private String newPassword;
+	private String confirmPassword;
 
 	private List<Cart> carts;
 
@@ -129,6 +132,11 @@ public class User {
 		this.carts = carts;
 	}
 
+	/**
+	 * 
+	 * @param cart
+	 * @return
+	 */
 	public boolean removeCart(Cart cart) {
 		if (carts != null && !carts.isEmpty()) {
 			carts.remove(cart);
@@ -136,12 +144,62 @@ public class User {
 		return true;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public UserType getType() {
 		return type;
 	}
 
+	/**
+	 * 
+	 * @param type
+	 */
 	public void setType(UserType type) {
 		this.type = type;
+	}
+
+	/**
+	 * @return the oldPassword
+	 */
+	public String getOldPassword() {
+		return oldPassword;
+	}
+
+	/**
+	 * @param oldPassword the oldPassword to set
+	 */
+	public void setOldPassword(String oldPassword) {
+		this.oldPassword = oldPassword;
+	}
+
+	/**
+	 * @return the newPassword
+	 */
+	public String getNewPassword() {
+		return newPassword;
+	}
+
+	/**
+	 * @param newPassword the newPassword to set
+	 */
+	public void setNewPassword(String newPassword) {
+		this.newPassword = newPassword;
+	}
+
+	/**
+	 * @return the confirmPassword
+	 */
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+
+	/**
+	 * @param confirmPassword the confirmPassword to set
+	 */
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
 	}
 
 	/*

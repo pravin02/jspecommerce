@@ -114,7 +114,7 @@ String failedMesage = request.getParameter("failed");
 					<div class="login-form">
 						<!--login form-->
 						<h2>Farmer Login to your account</h2>
-						<form action="common?action=farmerLogin" method="post">
+						<form action="common?action=login" method="post">
 							<input type="email" placeholder="Email Address" name="emailId" />
 							<input type="password" placeholder="Password" name="password" />
 							<span> <input type="checkbox" class="checkbox">

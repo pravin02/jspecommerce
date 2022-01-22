@@ -9,7 +9,6 @@ import org.pk.ecommerce.entities.user.User;
 import org.pk.ecommerce.entities.user.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
 /**
@@ -74,12 +73,8 @@ public class CommonDaoImpl implements CommonDao {
 	@Override
 	public boolean isUserAllreadyRegistered(String userName) {
 		String SQL = "{CALL isUserAlreadyExists(?)}";
-		List<String> list = jdbcTemplateObject.query(SQL, new RowMapper<String>() {
-			@Override
-			public String mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
-				return rs.getString(1);
-			}
-		}, userName);
+		List<String> list = jdbcTemplateObject.query(SQL, (java.sql.ResultSet rs, int rowMap) -> rs.getString(1),
+				userName);
 		return !list.isEmpty();
 	}
 
@@ -95,12 +90,8 @@ public class CommonDaoImpl implements CommonDao {
 	@Override
 	public String isMobileOrEmailAllreadyExists(String mobileNumber, String emailId) {
 		String SQL = "{CALL checkMobileOrEmailExists(?, ?)}";
-		List<String> list = jdbcTemplateObject.query(SQL, new RowMapper<String>() {
-			@Override
-			public String mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
-				return rs.getString(1);
-			}
-		}, new Object[] { mobileNumber, emailId });
+		List<String> list = jdbcTemplateObject.query(SQL, (java.sql.ResultSet rs, int rowMap) -> rs.getString(1),
+				new Object[] { mobileNumber, emailId });
 		return (list != null && !list.isEmpty()) ? list.get(0) : null;
 	}
 
@@ -119,64 +110,39 @@ public class CommonDaoImpl implements CommonDao {
 	@Override
 	public User loginFarmerUser(String userName, String password) {
 		String SQL = "SELECT * FROM user where type = 'Farmer' and emailId=? and password=?";
-		List<User> list = jdbcTemplateObject.query(SQL, new RowMapper<User>() {
-			@Override
-			public User mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
-				User user = new User();
-				user.setUserId(rs.getInt("userId"));
-				user.setPassword(rs.getString("password"));
-				user.setFullName(rs.getString("fullName"));
-				user.setDob(rs.getString("dob"));
-				user.setMobileNo(rs.getString("mobileNumber"));
-				user.setEmailId(rs.getString("emailId"));
-				user.setType(UserType.getUserType(rs.getString("type")));
-				user.setCarts(customerDao.getCarts(rs.getInt("userId")));
-				return user;
-			}
-		}, new Object[] { userName, password });
+		List<User> list = jdbcTemplateObject.query(SQL, (java.sql.ResultSet rs, int rowMap) -> mapRsToUser(rs),
+				new Object[] { userName, password });
 		return (list != null && !list.isEmpty()) ? list.get(0) : null;
 	}
 
 	@Override
 	public User loginAdminUser(String userName, String password) {
 		String SQL = "SELECT * FROM user where type = 'Admin' and emailId=? and password=?";
-		List<User> list = jdbcTemplateObject.query(SQL, new RowMapper<User>() {
-			@Override
-			public User mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
-				User user = new User();
-				user.setUserId(rs.getInt("userId"));
-				user.setPassword(rs.getString("password"));
-				user.setFullName(rs.getString("fullName"));
-				user.setDob(rs.getString("dob"));
-				user.setMobileNo(rs.getString("mobileNumber"));
-				user.setEmailId(rs.getString("emailId"));
-				user.setType(UserType.getUserType(rs.getString("type")));
-				user.setCarts(customerDao.getCarts(rs.getInt("userId")));
-				return user;
-			}
-		}, new Object[] { userName, password });
+		List<User> list = jdbcTemplateObject.query(SQL, (java.sql.ResultSet rs, int rowMap) -> mapRsToUser(rs),
+				new Object[] { userName, password });
 		return (list != null && !list.isEmpty()) ? list.get(0) : null;
 	}
 
 	@Override
 	public User loginDriverUser(String userName, String password) {
 		String SQL = "SELECT * FROM user where type = 'Driver' and emailId=? and password=?";
-		List<User> list = jdbcTemplateObject.query(SQL, new RowMapper<User>() {
-			@Override
-			public User mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
-				User user = new User();
-				user.setUserId(rs.getInt("userId"));
-				user.setPassword(rs.getString("password"));
-				user.setFullName(rs.getString("fullName"));
-				user.setDob(rs.getString("dob"));
-				user.setMobileNo(rs.getString("mobileNumber"));
-				user.setEmailId(rs.getString("emailId"));
-				user.setType(UserType.getUserType(rs.getString("type")));
-				user.setCarts(customerDao.getCarts(rs.getInt("userId")));
-				return user;
-			}
-		}, new Object[] { userName, password });
+		List<User> list = jdbcTemplateObject.query(SQL, (java.sql.ResultSet rs, int rowMap) -> mapRsToUser(rs),
+				new Object[] { userName, password });
 		return (list != null && !list.isEmpty()) ? list.get(0) : null;
+	}
+
+	public User mapRsToUser(java.sql.ResultSet rs) throws SQLException {
+		User user = new User();
+		user.setUserId(rs.getInt("userId"));
+		user.setPassword(rs.getString("password"));
+		user.setFullName(rs.getString("fullName"));
+		user.setDob(rs.getString("dob"));
+		user.setGender(rs.getString("gender"));
+		user.setMobileNo(rs.getString("mobileNumber"));
+		user.setEmailId(rs.getString("emailId"));
+		user.setType(UserType.getUserType(rs.getString("type")));
+		user.setCarts(customerDao.getCarts(rs.getInt("userId")));
+		return user;
 	}
 
 	/*
@@ -185,14 +151,18 @@ public class CommonDaoImpl implements CommonDao {
 	 * @see org.pk.ecommerce.dao.LoginDao#updatePassword(int, java.lang.String,
 	 * java.lang.String)
 	 */
-	public String updatePassword(int userId, String oldPassword, String newPassword) {
+	public String updatePassword(String emailId, String oldPassword, String newPassword) {
 		String SQL = "{CALL updatePassword(?, ?, ?)}";
-		List<String> list = jdbcTemplateObject.query(SQL, new RowMapper<String>() {
-			@Override
-			public String mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
-				return rs.getString("message");
-			}
-		}, userId, oldPassword, newPassword);
+		List<String> list = jdbcTemplateObject.query(SQL,
+				(java.sql.ResultSet rs, int rowMap) -> rs.getString("message"), emailId, oldPassword, newPassword);
+		return (list != null && list.size() == 1) ? list.get(0) : null;
+	}
+
+	@Override
+	public User getUserByUserId(String emailId) {
+		String SQL = "SELECT * FROM user WHERE emailId=?";
+		List<User> list = jdbcTemplateObject.query(SQL, (java.sql.ResultSet rs, int rowMap) -> mapRsToUser(rs),
+				emailId);
 		return (list != null && list.size() == 1) ? list.get(0) : null;
 	}
 

@@ -1,12 +1,7 @@
-
-<%@page import="org.pk.ecommerce.entities.product.Product"%>
-<%@page import="org.pk.ecommerce.entities.product.SubCategory"%>
 <%@page import="org.pk.ecommerce.dao.CustomerDao"%>
 <%@page import="org.springframework.beans.factory.annotation.Autowired"%>
 <%@page
 	import="org.springframework.web.context.support.SpringBeanAutowiringSupport"%>
-<%@page import="org.pk.ecommerce.entities.product.Category"%>
-<%@page import="java.util.List"%>
 <%@page import="org.pk.ecommerce.GlobalConstants"%>
 <%@page import="org.pk.ecommerce.entities.user.User"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -19,17 +14,6 @@
 	private CustomerDao customerDao;%>
 <%
 User user = (User) session.getAttribute(GlobalConstants.USER_DETAILS);
-
-List<Category> categories = customerDao.getAllCategories();
-
-List<Product> products = null;
-int subCategoryId = 1;
-try {
-	if (request.getParameter("subCategoryId") != null)
-		subCategoryId = Integer.parseInt(request.getParameter("subCategoryId"));
-} finally {
-	products = customerDao.getAllProductList(subCategoryId, "", 0);
-}
 %>
 
 <!DOCTYPE html>
@@ -39,7 +23,7 @@ try {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-<title>Home | Online Agree Pet Zone</title>
+<title>User Profile | Online Agree Pet Zone</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <link href="css/prettyPhoto.css" rel="stylesheet">
@@ -90,7 +74,7 @@ try {
 								} else {
 								%>
 								<li><a href="submitFeedback.jsp"><i class="fa fa-lock"></i>Feedback</a></li>
-								<li><a href="login.jsp"><i class="fa fa-lock"></i>Logout</a></li>								
+								<li><a href="login.jsp"><i class="fa fa-lock"></i>Logout</a></li>
 								<%
 								}
 								%>
@@ -107,87 +91,33 @@ try {
 	<section>
 		<div class="container">
 			<div class="row" style="padding-top: 20px">
-				<div class="col-sm-3">
-					<div class="left-sidebar">
-						<h2>Category</h2>
-						<div class="panel-group category-products" id="accordian">
-							<!--category-productsr-->
-							<%
-							if (categories != null && !categories.isEmpty()) {
-								for (Category category : categories) {
-							%>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title">
-										<a data-toggle="collapse" data-parent="#accordian"
-											href="#subCate<%=category.getCategoryId()%>"> <span
-											class="badge pull-right"><i class="fa fa-plus"></i></span> <%=category.getCategoryName()%>
-										</a>
-									</h4>
-								</div>
-								<div id="subCate<%=category.getCategoryId()%>"
-									class="panel-collapse collapse">
-									<div class="panel-body">
-										<ul>
-											<%
-											if (category.getSubCategories() != null && !category.getSubCategories().isEmpty()) {
-												for (SubCategory subCategory : category.getSubCategories()) {
-											%>
-											<a
-												href="index.jsp?subCategoryId=<%=subCategory.getSubCategoryId()%>">
-												<li><%=subCategory.getSubCategoryName()%></li>
-											</a>
-											<%
-											}
-											}
-											%>
-										</ul>
-									</div>
-								</div>
-							</div>
-							<%
-							}
-							}
-							%>
-						</div>
-					</div>
+				<div class="signup-form col-md-4 col-md-offset-4">
+					<!--sign up form-->
+					<h2 style="text-align: center;">
+						Update
+						
+						Profile
+					</h2>
+					<form action="common?action=updateUser" method="post">
+						 <input type="text" name="fullName"
+							placeholder="Full Name" value="<%=user.getFullName()%>"
+							disabled="disabled" /> <input type="email" name="emailId"
+							placeholder="Email Address" value="<%=user.getEmailId()%>"
+							disabled="disabled" /> <input type="text" name="mobileNumber"
+							value="<%=user.getMobileNo()%>" placeholder="Contact" /> <input
+							type="text" name="gender" value="<%=user.getGender()%>"
+							placeholder="Gender" disabled="disabled" /> <input type="text"
+							name="dob" value="<%=user.getDob()%>" placeholder="Date Of Birth"
+							disabled="disabled" /> <input type="text" name="oldPassword"
+							placeholder="Old Password" /> <input type="text"
+							name="newPassword" placeholder="New Password" /> <input
+							type="text" name="confirmPassword" placeholder="Confirm Password" />
+						<br>
+						<button type="submit" class="btn btn-default">Update</button>
+						<br> <br>
+					</form>
 				</div>
-				<div class="col-sm-9 padding-right">
-					<div class="features_items">
-						<h2 class="title text-center">Pets</h2>
-						<%
-						if (products != null && !products.isEmpty()) {
-							for (Product product : products) {
-						%>
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products" style="border: solid 1px">
-									<div class="productinfo text-center" style="margin: 5px">
-										<%
-										System.out.println(request.getContextPath() + "/" + product.getImageNamePath());
-										%>
-										<img
-											src="<%=request.getContextPath() + "/" + product.getImageNamePath()%>"
-											alt="<%=product.getProductName()%>" />
-										<p><%=product.getProductName()%></p>
-										<p><%=product.getDescription()%></p>
-										<h2><%=product.getPrice()%></h2>
-										<a
-											href="product-details.jsp?productId=<%=product.getProductId()%>"
-											class="btn btn-default add-to-cart"> <i
-											class="fa fa-shopping-cart"></i>Add to cart
-										</a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<%
-						}
-						}
-						%>
-					</div>
-					<!--features_items-->
-				</div>
+				<!--/sign up form-->
 			</div>
 		</div>
 	</section>
