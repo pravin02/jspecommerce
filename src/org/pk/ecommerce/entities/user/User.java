@@ -13,6 +13,7 @@ public class User {
 	private String gender;
 	private String dob;
 	private String mobileNo;
+	private UserType type;
 
 	private List<Cart> carts;
 
@@ -24,8 +25,7 @@ public class User {
 	}
 
 	/**
-	 * @param userId
-	 *            the userId to set
+	 * @param userId the userId to set
 	 */
 	public void setUserId(int userId) {
 		this.userId = userId;
@@ -39,8 +39,7 @@ public class User {
 	}
 
 	/**
-	 * @param emailId
-	 *            the emailId to set
+	 * @param emailId the emailId to set
 	 */
 	public void setEmailId(String emailId) {
 		this.emailId = emailId;
@@ -54,8 +53,7 @@ public class User {
 	}
 
 	/**
-	 * @param password
-	 *            the password to set
+	 * @param password the password to set
 	 */
 	public void setPassword(String password) {
 		this.password = password;
@@ -69,8 +67,7 @@ public class User {
 	}
 
 	/**
-	 * @param fullName
-	 *            the fullName to set
+	 * @param fullName the fullName to set
 	 */
 	public void setFullName(String fullName) {
 		this.fullName = fullName;
@@ -84,8 +81,7 @@ public class User {
 	}
 
 	/**
-	 * @param gender
-	 *            the gender to set
+	 * @param gender the gender to set
 	 */
 	public void setGender(String gender) {
 		this.gender = gender;
@@ -99,8 +95,7 @@ public class User {
 	}
 
 	/**
-	 * @param dob
-	 *            the dob to set
+	 * @param dob the dob to set
 	 */
 	public void setDob(String dob) {
 		this.dob = dob;
@@ -114,8 +109,7 @@ public class User {
 	}
 
 	/**
-	 * @param mobileNo
-	 *            the mobileNo to set
+	 * @param mobileNo the mobileNo to set
 	 */
 	public void setMobileNo(String mobileNo) {
 		this.mobileNo = mobileNo;
@@ -129,8 +123,7 @@ public class User {
 	}
 
 	/**
-	 * @param carts
-	 *            the carts to set
+	 * @param carts the carts to set
 	 */
 	public void setCarts(List<Cart> carts) {
 		this.carts = carts;
@@ -143,6 +136,14 @@ public class User {
 		return true;
 	}
 
+	public UserType getType() {
+		return type;
+	}
+
+	public void setType(UserType type) {
+		this.type = type;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -150,11 +151,9 @@ public class User {
 	 */
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", emailId=" + emailId
-				+ ", password=" + password + ", fullName=" + fullName
-				+ ", gender=" + gender + ", dob=" + dob + ", mobileNo="
-				+ mobileNo + ", carts.size="
-				+ (carts != null ? carts.size() : 0) + "]";
+		return "User [userId=" + userId + ", emailId=" + emailId + ", password=" + password + ", fullName=" + fullName
+				+ ", gender=" + gender + ", dob=" + dob + ", mobileNo=" + mobileNo + ", type=" + type.name()
+				+ ", carts.size=" + (carts != null ? carts.size() : 0) + "]";
 	}
 
 }

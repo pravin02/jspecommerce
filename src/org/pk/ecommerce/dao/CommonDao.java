@@ -32,7 +32,21 @@ public interface CommonDao {
 	 * @param password
 	 * @return
 	 */
-	User loginUser(String userName, String password);
+	User loginFarmerUser(String userName, String password);
+	
+	/**
+	 * @param userName
+	 * @param password
+	 * @return
+	 */
+	User loginAdminUser(String userName, String password);
+	
+	/**
+	 * @param userName
+	 * @param password
+	 * @return
+	 */
+	User loginDriverUser(String userName, String password);
 
 	/**
 	 * @param userId
