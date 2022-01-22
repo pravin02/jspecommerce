@@ -28,11 +28,6 @@
 <body>
 	<header id="header">
 		<!--header-->
-		<div class="header_top">
-			<!--header_top-->
-		</div>
-		<!--/header_top-->
-
 		<div class="header-middle">
 			<!--header-middle-->
 			<div class="container">
@@ -43,8 +38,14 @@
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
+								<li><a href="contact-us.jsp"><i class="fa fa-contact"></i>
+										Contact Us</a></li>
 								<li><a href="login.jsp"><i class="fa fa-lock"></i>
-										Login</a></li>
+										Farmer Login</a></li>
+								<li><a href="adminLogin.jsp"><i class="fa fa-lock"></i>
+										Admin Login</a></li>
+								<li><a href="driverLogin.jsp"><i class="fa fa-lock"></i>
+										Driver Login</a></li>
 							</ul>
 						</div>
 					</div>
