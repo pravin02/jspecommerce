@@ -71,7 +71,7 @@ double subTotal = 0, total = 0;
 							<ul class="nav navbar-nav">
 								<li><a href="index.jsp"><i class="fa fa-user"></i>
 										Welcome, <%=user.getFullName()%></a></li>
-								<li><a href="homePage.jsp"><i class="fa fa-user"></i>
+								<li><a href="userProfile.jsp"><i class="fa fa-user"></i>
 										Account</a></li>
 								<li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i>
 										Cart</a></li>

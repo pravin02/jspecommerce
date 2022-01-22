@@ -14,6 +14,7 @@
 	private CustomerDao customerDao;%>
 <%
 User user = (User) session.getAttribute(GlobalConstants.USER_DETAILS);
+String message = request.getParameter("message");
 %>
 
 <!DOCTYPE html>
@@ -90,20 +91,29 @@ User user = (User) session.getAttribute(GlobalConstants.USER_DETAILS);
 
 	<section>
 		<div class="container">
-			<div class="row" style="padding-top: 20px">
+		<div class="row">
+				<div class="col-md-4 col-md-offset-4">
+					<%
+					if (message != null) {
+					%>
+					<span style="font-size: 20px"><%=message%></span>
+					<%
+					}
+					%>
+				</div>
+			</div>
+			<div class="row" >
 				<div class="signup-form col-md-4 col-md-offset-4">
 					<!--sign up form-->
-					<h2 style="text-align: center;">
-						Update
-						
-						Profile
-					</h2>
+					<h2 style="text-align: center;">Update Profile</h2>
 					<form action="common?action=updateUser" method="post">
-						 <input type="text" name="fullName"
-							placeholder="Full Name" value="<%=user.getFullName()%>"
-							disabled="disabled" /> <input type="email" name="emailId"
-							placeholder="Email Address" value="<%=user.getEmailId()%>"
-							disabled="disabled" /> <input type="text" name="mobileNumber"
+						<input type="text" name="userId" placeholder="UserId"
+							value="<%=user.getUserId()%>" style="display:none" /> <input type="text"
+							name="fullName" placeholder="Full Name"
+							value="<%=user.getFullName()%>" disabled="disabled" /> <input
+							type="email" id="emailId" name="emailId"
+							placeholder="Email Address" value="<%=user.getEmailId()%>" />
+						<input type="text" name="mobileNumber"
 							value="<%=user.getMobileNo()%>" placeholder="Contact" /> <input
 							type="text" name="gender" value="<%=user.getGender()%>"
 							placeholder="Gender" disabled="disabled" /> <input type="text"

@@ -5,6 +5,7 @@
 
 <%
 User user = (User) session.getAttribute(GlobalConstants.USER_DETAILS);
+String message = request.getParameter("message");
 %>
 
 <!DOCTYPE html>
@@ -57,11 +58,8 @@ User user = (User) session.getAttribute(GlobalConstants.USER_DETAILS);
 							<ul class="nav navbar-nav">
 								<li><a href="index.jsp"><i class="fa fa-user"></i>
 										Welcome, <%=user.getFullName()%></a></li>
-								<li><a href="homePage.jsp"><i class="fa fa-user"></i>
+								<li><a href="userProfile.jsp"><i class="fa fa-user"></i>
 										Account</a></li>
-								<!-- <li><a href="#"><i class="fa fa-star"></i> Wishlist</a></li> -->
-								<!-- <li><a href="checkout.jsp"><i class="fa fa-crosshairs"></i>
-										Checkout</a></li> -->
 								<li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i>
 										Cart</a></li>
 								<%
@@ -131,19 +129,25 @@ User user = (User) session.getAttribute(GlobalConstants.USER_DETAILS);
 	<section>
 		<div class="container">
 			<div class="row">
-				<div class="col-sm-5">
+				<div class="col-md-4 col-md-offset-4">
+					<%
+					if (message != null) {
+					%>
+					<span style="font-size: 20px"><%=message%></span>
+					<%
+					}
+					%>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-12">
 					<div class="product-information">
 						<div class="login-form">
 							<!--login form-->
 							<h2>Submit your Feedback</h2>
 							<form action="common?action=submitFeedback" method="post">
-								<input type="text" placeholder="Full Name" name="fullName"
-									value= <%=user.getFullName()%> disabled="disabled" />
-									 <input
-									type="email" placeholder="Email Address" name="emailId"
-									disabled="disabled" hidden /> 
-									<textarea rows="4" cols="5"
-									placeholder="Submit your feedback" name="feedback" ></textarea>
+								<textarea rows="4" cols="5" placeholder="Submit your feedback"
+									name="feedback"></textarea>
 								<button type="submit" class="btn btn-default">Submit</button>
 							</form>
 						</div>

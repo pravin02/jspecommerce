@@ -36,12 +36,12 @@ public class CommonServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
 		// register farmer action
-		if (action.equalsIgnoreCase("registerUser")) {
+		if ("registerUser".equalsIgnoreCase(action)) {
 			doActionRegisterUser(request, response);
 		}
 
 		// farmer login action
-		if (action.equalsIgnoreCase("login")) {
+		else if ("login".equalsIgnoreCase(action)) {
 			String emailId = request.getParameter("emailId");
 			String password = request.getParameter("password");
 			User user = commonDao.loginFarmerUser(emailId, password);
@@ -49,7 +49,7 @@ public class CommonServlet extends HttpServlet {
 		}
 
 		// Admin login action
-		if (action.equalsIgnoreCase("adminLogin")) {
+		else if ("adminLogin".equalsIgnoreCase(action)) {
 			String emailId = request.getParameter("emailId");
 			String password = request.getParameter("password");
 			User user = commonDao.loginAdminUser(emailId, password);
@@ -57,7 +57,7 @@ public class CommonServlet extends HttpServlet {
 		}
 
 		// Driver login action
-		if (action.equalsIgnoreCase("driverLogin")) {
+		else if ("driverLogin".equalsIgnoreCase(action)) {
 			String emailId = request.getParameter("emailId");
 			String password = request.getParameter("password");
 			User user = commonDao.loginDriverUser(emailId, password);
@@ -65,12 +65,28 @@ public class CommonServlet extends HttpServlet {
 		}
 
 		// User Profile update
-		if (action.equalsIgnoreCase("updateUser")) {
+		else if ("updateUser".equalsIgnoreCase(action)) {
 			User user = doActionUserUpdate(request, response);
-			HttpSession session = request.getSession();			
-			session.setAttribute(GlobalConstants.USER_DETAILS, user);
-			response.sendRedirect("userProfile.jsp");
+			if (user != null) {
+				HttpSession session = request.getSession();
+				session.removeAttribute(GlobalConstants.USER_DETAILS);
+				session.setAttribute(GlobalConstants.USER_DETAILS, user);
+				response.sendRedirect("userProfile.jsp?message=profile updated successfully");
+			} else {
+				response.sendRedirect("userProfile.jsp?message=Error while updating profile");
+			}
 
+		}
+		// submit feedback
+		else if ("submitFeedback".equalsIgnoreCase(action)) {
+			HttpSession session = request.getSession();
+			User user = (User)session.getAttribute(GlobalConstants.USER_DETAILS);
+			String feedback = request.getParameter("feedback");
+			if(this.commonDao.submitFeedback(user.getUserId(), feedback)) {
+				response.sendRedirect("submitFeedback.jsp?message=Feedback submitted successfully.");	
+			} else {
+				response.sendRedirect("submitFeedback.jsp?message=Feedback not submitted.");
+			}
 		}
 	}
 
@@ -143,19 +159,23 @@ public class CommonServlet extends HttpServlet {
 	 * @param response
 	 * @return
 	 */
-	public User doActionUserUpdate(HttpServletRequest request, HttpServletResponse response) {		
-		System.out.println("emai id ="+request.getParameter("emailId"));
-		
+	public User doActionUserUpdate(HttpServletRequest request, HttpServletResponse response) {
 		String emailId = request.getParameter("emailId");
-		String mobileNo = request.getParameter("mobileNumber");
 
 		String oldPassword = request.getParameter("oldPassword");
 		String newPassword = request.getParameter("newPassword");
 		String confirmPassword = request.getParameter("confirmPassword");
 
+		if ("".equals(oldPassword) || "".equals(newPassword) || "".equals(confirmPassword)) {
+			return null;
+		}
+
+		if (!newPassword.equals(confirmPassword)) {
+			return null;
+		}
+
 		User user = new User();
 		user.setEmailId(emailId);
-		user.setMobileNo(mobileNo);
 
 		user.setOldPassword(oldPassword);
 		user.setNewPassword(newPassword);
@@ -163,8 +183,6 @@ public class CommonServlet extends HttpServlet {
 
 		this.commonDao.updatePassword(emailId, oldPassword, newPassword);
 		user = this.commonDao.getUserByUserId(emailId);
-		
-		System.out.println(user);
 
 		return user;
 	}

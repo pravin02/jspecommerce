@@ -62,4 +62,12 @@ public interface CommonDao {
 	 */
 	User getUserByUserId(String emailId);
 
+	/**
+	 * 
+	 * @param userId
+	 * @param feedback
+	 * @return
+	 */
+	boolean submitFeedback(int userId, String feedback);
+
 }

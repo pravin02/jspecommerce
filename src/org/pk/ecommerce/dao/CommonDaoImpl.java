@@ -158,12 +158,24 @@ public class CommonDaoImpl implements CommonDao {
 		return (list != null && list.size() == 1) ? list.get(0) : null;
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public User getUserByUserId(String emailId) {
 		String SQL = "SELECT * FROM user WHERE emailId=?";
 		List<User> list = jdbcTemplateObject.query(SQL, (java.sql.ResultSet rs, int rowMap) -> mapRsToUser(rs),
 				emailId);
 		return (list != null && list.size() == 1) ? list.get(0) : null;
+	}
+
+	/**
+	 * 
+	 */
+	@Override
+	public boolean submitFeedback(int userId, String feedback) {
+		String SQL = "INSERT INTO FEEDBACK(userId, feedback) VALUES(?, ?)";
+		return jdbcTemplateObject.update(SQL, new Object[] { userId, feedback }) > 0;
 	}
 
 }
