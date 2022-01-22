@@ -22,6 +22,28 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/ ecommerce;
 USE ecommerce;
 
 --
+-- Table structure for table `ecommerce`.`feedback`
+--
+
+DROP TABLE IF EXISTS `feedback`;
+CREATE TABLE `feedback` (
+  `feedbackId` int(10) unsigned NOT NULL auto_increment,
+  `userId` int(10) unsigned NOT NULL default '0',
+  `feedback` varchar(1000) NOT NULL default '',
+  PRIMARY KEY  (`feedbackId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `ecommerce`.`feedback`
+--
+
+/*!40000 ALTER TABLE `feedback` DISABLE KEYS */;
+INSERT INTO `feedback` (`feedbackId`,`userId`,`feedback`) VALUES 
+ (5,2,'Welcome');
+/*!40000 ALTER TABLE `feedback` ENABLE KEYS */;
+
+
+--
 -- Table structure for table `ecommerce`.`product`
 --
 
@@ -216,7 +238,7 @@ CREATE TABLE `user` (
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
 INSERT INTO `user` (`userId`,`emailId`,`password`,`fullName`,`mobileNumber`,`gender`,`dob`,`type`) VALUES 
  (1,'ppp@gmail.com','ppp','Pravin P Patil','1234567890','MALE','01-01-2022','Admin'),
- (2,'test@gmail.com','test','Tester','1234567890','MALE','01-11-1212','Farmer'),
+ (2,'test@gmail.com','new','Tester','1234567890','MALE','01-11-1212','Farmer'),
  (3,'driver@gmail.com','driver','Driver','1234567890','MALE','01-01-2022','Driver');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
@@ -651,21 +673,63 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS `updatePassword`;
 DELIMITER $$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `updatePassword`(IN p_userId INT,IN p_oldPassword varchar(100),IN p_newPassword varchar(100))
-BEGIN
-	DECLARE p_message VARCHAR(100);
-    
-    IF(select password from user where userId = p_userId and password <> p_oldPassword)
-    THEN
-		SET p_message = 'old password not matched' ;
-	ELSE 
-		UPDATE user set password = p_newPassword where userId = p_userId;
-        SET p_message = 'password updated successfully.' ;
-    END IF;
-    
-    
-    
-    SELECT p_message as message;
+CREATE DEFINER=`root`@`localhost` PROCEDURE `updatePassword`(IN p_emailId varchar(200),IN p_oldPassword varchar(100),IN p_newPassword varchar(100))
+BEGIN
+
+
+
+	DECLARE p_message VARCHAR(100);
+
+
+
+    
+
+
+
+    IF(select password from user where emailId = p_emailId and password <> p_oldPassword)
+
+
+
+    THEN
+
+
+
+		SET p_message = 'old password not matched' ;
+
+
+
+	ELSE
+
+
+
+		UPDATE user set password = p_newPassword where emailId = p_emailId;
+
+
+
+        SET p_message = 'password updated successfully.' ;
+
+
+
+    END IF;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    SELECT p_message as message;
+
+
+
 END $$
 
 DELIMITER ;
