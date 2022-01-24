@@ -25,18 +25,7 @@ http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 		<servlet-name>commonController</servlet-name>
 		<url-pattern>/common</url-pattern>
 	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>customerController</servlet-name>
-		<servlet-class>org.pk.ecommerce.servlets.CustomerServlet</servlet-class>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>customerController</servlet-name>
-		<url-pattern>/customer</url-pattern>
-	</servlet-mapping>
-
+	
 	<error-page>
 		<error-code>404</error-code>
 		<location>/errorpages/404.html</location>
@@ -56,14 +45,4 @@ http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
 		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
 	</listener>
 	
-	
-	<!-- <filter>
-		<filter-name>session</filter-name>
-		<filter-class>org.pk.ecommerce.filter.ECommerceSessionFilter</filter-class>
-	</filter>
-	
-	<filter-mapping>
-	<filter-name>session</filter-name>
-	<url-pattern>/*</url-pattern>
-	</filter-mapping> -->
 </web-app>
