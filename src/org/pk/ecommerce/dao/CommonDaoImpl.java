@@ -162,10 +162,18 @@ public class CommonDaoImpl implements CommonDao {
 	 * 
 	 */
 	@Override
-	public User getUserByUserId(String emailId) {
+	public User getUserByEmailId(String emailId) {
 		String SQL = "SELECT * FROM user WHERE emailId=?";
 		List<User> list = jdbcTemplateObject.query(SQL, (java.sql.ResultSet rs, int rowMap) -> mapRsToUser(rs),
 				emailId);
+		return (list != null && list.size() == 1) ? list.get(0) : null;
+	}
+	
+	@Override
+	public User getUserByUserId(int userId) {
+		String SQL = "SELECT * FROM user WHERE userId=?";
+		List<User> list = jdbcTemplateObject.query(SQL, (java.sql.ResultSet rs, int rowMap) -> mapRsToUser(rs),
+				userId);
 		return (list != null && list.size() == 1) ? list.get(0) : null;
 	}
 
@@ -176,6 +184,13 @@ public class CommonDaoImpl implements CommonDao {
 	public boolean submitFeedback(int userId, String feedback) {
 		String SQL = "INSERT INTO FEEDBACK(userId, feedback) VALUES(?, ?)";
 		return jdbcTemplateObject.update(SQL, new Object[] { userId, feedback }) > 0;
+	}
+
+	@Override
+	public List<User> getAllDrivers() {
+		String SQL = "SELECT * FROM user where type = 'Driver'";
+		List<User> list = jdbcTemplateObject.query(SQL, (java.sql.ResultSet rs, int rowMap) -> mapRsToUser(rs));
+		return (list != null && !list.isEmpty()) ? list : null;
 	}
 
 }

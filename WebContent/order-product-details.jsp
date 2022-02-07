@@ -1,4 +1,5 @@
 
+<%@page import="org.pk.ecommerce.dao.CommonDao"%>
 <%@page import="java.util.stream.Stream"%>
 <%@page import="java.util.stream.Collectors"%>
 <%@page import="org.pk.ecommerce.entities.order.PurchaseDetail"%>
@@ -20,12 +21,16 @@
 	}
 
 	@Autowired
-	private CustomerDao customerDao;%>
+	private CustomerDao customerDao;
+	@Autowired
+	private CommonDao commonDao;%>
 <%
 User user = (User) session.getAttribute(GlobalConstants.USER_DETAILS);
 List<Category> categories = customerDao.getAllCategories();
-PurchaseMaster purchaseMaster = this.customerDao.getPurchaseMasterByUserId(user.getUserId(),
-		Integer.parseInt(request.getParameter("orderId")));
+PurchaseMaster purchaseMaster = this.customerDao.getPurchaseMasterByUserId(Integer.parseInt(request.getParameter("orderId")));
+System.out.println("DriverId "+purchaseMaster.getDriverId());
+User driver = commonDao.getUserByUserId(purchaseMaster.getDriverId());
+System.out.println(driver);
 %>
 
 <!DOCTYPE html>
@@ -160,6 +165,15 @@ PurchaseMaster purchaseMaster = this.customerDao.getPurchaseMasterByUserId(user.
 		.collect(Collectors.toList()).stream().reduce(0.0, Double::sum)%>
 								</label> <br /> <label>Status - <%=purchaseMaster.getStatus()%></label>
 								<br />
+								<%
+									if (driver != null) {
+									%>
+									<label>Driver - <%=driver.getFullName()%></label>
+									<%
+									} else { 
+									%>
+									<label>Driver - YET TO BE ASSIGNED</label>
+									<% } %>
 							</div>
 						</div>
 						<div class="row">

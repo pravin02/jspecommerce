@@ -9,9 +9,11 @@ import org.pk.ecommerce.entities.order.PurchaseDetail;
 import org.pk.ecommerce.entities.order.PurchaseMaster;
 import org.pk.ecommerce.entities.product.Cart;
 import org.pk.ecommerce.entities.product.Category;
+import org.pk.ecommerce.entities.product.Feedback;
 import org.pk.ecommerce.entities.product.Product;
 import org.pk.ecommerce.entities.product.SubCategory;
 import org.pk.ecommerce.entities.user.ShippingAddress;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
@@ -33,6 +35,9 @@ public class CustomerDaoImpl implements CustomerDao {
 	 */
 	// @Autowired
 	private JdbcTemplate jdbcTemplateObject;
+
+	@Autowired
+	CommonDao commonDao;
 
 	// private DataSource dataSource;
 
@@ -184,42 +189,29 @@ public class CustomerDaoImpl implements CustomerDao {
 	@Override
 	public PurchaseMaster getLatestPurchaseMaster(int userId) {
 		String SQL = "SELECT * FROM purchasemaster where userId=? and status <> 'Delivered' order by purchaseDate desc limit 1";
-		List<PurchaseMaster> list = jdbcTemplateObject.query(SQL, new RowMapper<PurchaseMaster>() {
-			@Override
-			public PurchaseMaster mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
-				PurchaseMaster object = new PurchaseMaster();
-				object.setPurchaseMasterId(rs.getInt("purchaseMasterId"));
-				object.setUserId(rs.getInt("userId"));
-				object.setShippingAddress(rs.getString("shippingAddress"));
-				object.setContact(rs.getString("contact"));
-				object.setPurchaseDetails(getPurchaseDetails(rs.getInt("purchaseMasterId")));
-				object.setPurchaseDateTime(rs.getTimestamp("purchaseDate"));
-				object.setStatus(rs.getString("status"));
-				return object;
-			}
-		}, userId);
+		List<PurchaseMaster> list = jdbcTemplateObject.query(SQL, this::mapRsToPurchaseMaster, userId);
 
 		return (list != null && !list.isEmpty()) ? list.get(0) : null;
 
 	}
 
+	private PurchaseMaster mapRsToPurchaseMaster(java.sql.ResultSet rs, int rowMap) throws SQLException {
+		PurchaseMaster object = new PurchaseMaster();
+		object.setPurchaseMasterId(rs.getInt("purchaseMasterId"));
+		object.setUserId(rs.getInt("userId"));
+		object.setShippingAddress(rs.getString("shippingAddress"));
+		object.setContact(rs.getString("contact"));
+		object.setPurchaseDetails(getPurchaseDetails(rs.getInt("purchaseMasterId")));
+		object.setPurchaseDateTime(rs.getTimestamp("purchaseDate"));
+		object.setDriverId(rs.getInt("driverId"));
+		object.setStatus(rs.getString("status"));
+		return object;
+	}
+
 	@Override
-	public PurchaseMaster getPurchaseMasterByUserId(int userId, int orderId) {
-		String SQL = "SELECT * FROM purchasemaster where purchaseMasterId=? and userId=?";
-		List<PurchaseMaster> list = jdbcTemplateObject.query(SQL, new RowMapper<PurchaseMaster>() {
-			@Override
-			public PurchaseMaster mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
-				PurchaseMaster object = new PurchaseMaster();
-				object.setPurchaseMasterId(rs.getInt("purchaseMasterId"));
-				object.setUserId(rs.getInt("userId"));
-				object.setShippingAddress(rs.getString("shippingAddress"));
-				object.setContact(rs.getString("contact"));
-				object.setPurchaseDetails(getPurchaseDetails(rs.getInt("purchaseMasterId")));
-				object.setPurchaseDateTime(rs.getTimestamp("purchaseDate"));
-				object.setStatus(rs.getString("status"));
-				return object;
-			}
-		}, orderId, userId);
+	public PurchaseMaster getPurchaseMasterByUserId(int orderId) {
+		String SQL = "SELECT * FROM purchasemaster where purchaseMasterId=?";
+		List<PurchaseMaster> list = jdbcTemplateObject.query(SQL, this::mapRsToPurchaseMaster, orderId);
 
 		return (list != null && !list.isEmpty()) ? list.get(0) : null;
 	}
@@ -232,20 +224,7 @@ public class CustomerDaoImpl implements CustomerDao {
 	@Override
 	public List<PurchaseMaster> getPurchaseMaster(int userId) {
 		String SQL = "{CALL getPurchaseMaster(?)}";
-		List<PurchaseMaster> list = jdbcTemplateObject.query(SQL, new RowMapper<PurchaseMaster>() {
-			@Override
-			public PurchaseMaster mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
-				PurchaseMaster object = new PurchaseMaster();
-				object.setPurchaseMasterId(rs.getInt("purchaseMasterId"));
-				object.setUserId(rs.getInt("userId"));
-				object.setShippingAddress(rs.getString("shippingAddress"));
-				object.setContact(rs.getString("contact"));
-				object.setPurchaseDetails(getPurchaseDetails(rs.getInt("purchaseMasterId")));
-				object.setPurchaseDateTime(rs.getTimestamp("purchaseDate"));
-				object.setStatus(rs.getString("status"));
-				return object;
-			}
-		}, userId);
+		List<PurchaseMaster> list = jdbcTemplateObject.query(SQL, this::mapRsToPurchaseMaster, userId);
 
 		return (list != null && !list.isEmpty()) ? list : null;
 
@@ -474,5 +453,34 @@ public class CustomerDaoImpl implements CustomerDao {
 	public void emptyCart(int userId) {
 		String SQL = "delete from shoppingcart where userId=?";
 		jdbcTemplateObject.update(SQL, new Object[] { userId });
+	}
+
+	@Override
+	public List<PurchaseMaster> getPurchaseMasterForAdmin() {
+		String SQL = "select * from purchasemaster";
+		List<PurchaseMaster> list = jdbcTemplateObject.query(SQL, this::mapRsToPurchaseMaster);
+
+		return (list != null && !list.isEmpty()) ? list : null;
+	}
+
+	@Override
+	public boolean assignDriverToOrder(int orderId, int driverId) {
+		String SQL = "update purchasemaster set driverid= ?, status='Driver Assigned'  where purchaseMasterid=?;";
+		return jdbcTemplateObject.update(SQL, new Object[] { driverId, orderId }) > 1 ? true : false;
+	}
+
+	@Override
+	public List<Feedback> viewAllFeedbacks() {
+		String SQL = "select * from feedback";
+		List<Feedback> list = jdbcTemplateObject.query(SQL, (java.sql.ResultSet rs, int rowMap) -> {
+			Feedback object = new Feedback();
+			object.setFeedbackId(rs.getInt("feedbackId"));
+			object.setFeedback(rs.getString("feedback"));
+			object.setFarmerName(commonDao.getUserByUserId(rs.getInt("userId")).getFullName());
+			object.setDateTime(rs.getTimestamp("dateTime"));
+			return object;
+		});
+
+		return (list != null && !list.isEmpty()) ? list : null;
 	}
 }

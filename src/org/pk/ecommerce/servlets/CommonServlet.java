@@ -103,9 +103,12 @@ public class CommonServlet extends HttpServlet {
 			HttpSession session = request.getSession();
 			session.setAttribute(GlobalConstants.USER_DETAILS, user);
 			if (UserType.Admin.name().equals(user.getType().name())) {
-				response.sendRedirect("admin/index.jsp");
+				response.sendRedirect("admin-orders.jsp");
+			} else if (UserType.Driver.name().equals(user.getType().name())) {
+				response.sendRedirect("driver-index.jsp");
+			} else {
+				response.sendRedirect("index.jsp");
 			}
-			response.sendRedirect("index.jsp");
 		} else {
 			String action = request.getParameter("action");
 			response.sendRedirect(action + ".jsp?failed=Invalid Username or Password");
@@ -185,7 +188,7 @@ public class CommonServlet extends HttpServlet {
 		user.setConfirmPassword(confirmPassword);
 
 		this.commonDao.updatePassword(emailId, oldPassword, newPassword);
-		user = this.commonDao.getUserByUserId(emailId);
+		user = this.commonDao.getUserByEmailId(emailId);
 
 		return user;
 	}

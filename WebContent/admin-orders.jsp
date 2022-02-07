@@ -1,7 +1,4 @@
 
-<%@page import="java.util.stream.Stream"%>
-<%@page import="java.util.stream.Collectors"%>
-<%@page import="org.pk.ecommerce.entities.order.PurchaseDetail"%>
 <%@page import="org.pk.ecommerce.entities.order.PurchaseMaster"%>
 <%@page import="org.pk.ecommerce.entities.product.Product"%>
 <%@page import="org.pk.ecommerce.entities.product.SubCategory"%>
@@ -24,8 +21,7 @@
 <%
 User user = (User) session.getAttribute(GlobalConstants.USER_DETAILS);
 List<Category> categories = customerDao.getAllCategories();
-PurchaseMaster purchaseMaster = this.customerDao.getPurchaseMasterByUserId(user.getUserId(),
-		Integer.parseInt(request.getParameter("orderId")));
+List<PurchaseMaster> purchaseMasterList = this.customerDao.getPurchaseMasterForAdmin();
 %>
 
 <!DOCTYPE html>
@@ -35,7 +31,7 @@ PurchaseMaster purchaseMaster = this.customerDao.getPurchaseMasterByUserId(user.
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-<title>Orders | Online Agree Pet Zone</title>
+<title>Home | Online Agree Pet Zone</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <link href="css/prettyPhoto.css" rel="stylesheet">
@@ -66,25 +62,22 @@ PurchaseMaster purchaseMaster = this.customerDao.getPurchaseMasterByUserId(user.
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-4">
-						<%@include file="../icon.jsp"%>
+						<%@include file="icon.jsp"%>
 					</div>
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
 
 								<li><a href="userProfile.jsp"><i class="fa fa-user"></i>
-										Account</a></li>
-								<li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i>
-										Cart</a></li>
+										Account</a></li>								
 								<%
 								if (user == null) {
 								%>
-								<li><a href="login.jsp"><i class="fa fa-lock"></i>Login</a></li>
+								<li><a href="adminLogin.jsp"><i class="fa fa-lock"></i>Login</a></li>
 								<%
 								} else {
-								%>
-								<li><a href="orders.jsp"><i class="fa fa-shop"></i>Orders</a></li>
-								<li><a href="submitFeedback.jsp"><i class="fa fa-lock"></i>Feedback</a></li>
+								%>								
+								<li><a href="viewFeedback.jsp"><i class="fa fa-eye"></i>Feedback</a></li>
 								<li><a href="login.jsp"><i class="fa fa-lock"></i>Logout</a></li>
 								<%
 								}
@@ -149,48 +142,35 @@ PurchaseMaster purchaseMaster = this.customerDao.getPurchaseMasterByUserId(user.
 				</div>
 				<div class="col-sm-9 padding-right">
 					<div class="features_items">
-						<h2 class="title text-center">Order Details List</h2>
-						<div class="row">
-							<div class="col-md-12">
-								<label>Order ID - <%=purchaseMaster.getPurchaseMasterId()%></label>
-								<br /> <label>Address - <%=purchaseMaster.getShippingAddress()%></label>
-								<br /> <label>Contact - <%=purchaseMaster.getContact()%></label>
-								<br /> <label>DateTime - <%=purchaseMaster.getPurchaseDateTime()%></label><br />
-								<label>Grand Total -<%=purchaseMaster.getPurchaseDetails().stream().map(pd1 -> pd1.getQuantity() * pd1.getPrice())
-		.collect(Collectors.toList()).stream().reduce(0.0, Double::sum)%>
-								</label> <br /> <label>Status - <%=purchaseMaster.getStatus()%></label>
-								<br />
-							</div>
-						</div>
+						<h2 class="title text-center">Orders List</h2>
 						<div class="row">
 							<div class="col-md-12">
 								<table
 									class="table table-responsive table-stripped table-bordered">
 									<thead>
 										<tr>
-											<th>Product Id</th>
-											<th>Image</th>
-											<th>Name</th>
-											<th>Quantity</th>
-											<th>Price</th>
-											<th>Total</th>
+											<th>Order Id</th>
+											<th>Address</th>
+											<th>Contact No</th>
+											<th>No Of Items</th>
+											<th>Assigned Driver</th>
+											<th>Status</th>
 										</tr>
 									</thead>
 									<tbody>
 										<%
-										if (purchaseMaster != null && purchaseMaster.getPurchaseDetails() != null) {
-											for (PurchaseDetail pd : purchaseMaster.getPurchaseDetails()) {
+										if (purchaseMasterList != null && !purchaseMasterList.isEmpty()) {
+											for (PurchaseMaster pm : purchaseMasterList) {
 										%>
 										<tr>
-											<td><%=pd.getPurchaseDetailId()%></td>
-											<td><img
-												src="<%=request.getContextPath() + "/" + pd.getProduct().getImageNamePath()%>"
-												alt="<%=pd.getProduct().getProductName()%>"
-												style="max-height: 200px; max-width: 200px" /></td>
-											<td><%=pd.getProduct().getProductName()%></td>
-											<td><%=pd.getQuantity()%></td>
-											<td><%=pd.getPrice()%></td>
-											<td><%=pd.getQuantity() * pd.getPrice()%></td>
+											<td><a
+												href="admin-order-product-details.jsp?orderId=<%=pm.getPurchaseMasterId()%>"><%=pm.getPurchaseMasterId()%></a>
+											</td>
+											<td><%=pm.getShippingAddress()%></td>
+											<td><%=pm.getContact()%></td>
+											<td><%=pm.getPurchaseDetails().size()%></td>
+											<td><%=pm.getDriverId()%></td>
+											<td><%=pm.getStatus()%></td>
 										</tr>
 										<%
 										}
@@ -206,7 +186,7 @@ PurchaseMaster purchaseMaster = this.customerDao.getPurchaseMasterByUserId(user.
 			</div>
 		</div>
 	</section>
-	<%@include file="../footer.jsp"%>
+	<%@include file="footer.jsp"%>
 	<!--/Footer-->
 	<script src="js/jquery.js"></script>
 	<script src="js/bootstrap.min.js"></script>

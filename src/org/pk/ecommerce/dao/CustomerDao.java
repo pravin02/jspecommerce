@@ -6,6 +6,7 @@ import org.pk.ecommerce.entities.order.PurchaseDetail;
 import org.pk.ecommerce.entities.order.PurchaseMaster;
 import org.pk.ecommerce.entities.product.Cart;
 import org.pk.ecommerce.entities.product.Category;
+import org.pk.ecommerce.entities.product.Feedback;
 import org.pk.ecommerce.entities.product.Product;
 import org.pk.ecommerce.entities.product.SubCategory;
 import org.pk.ecommerce.entities.user.ShippingAddress;
@@ -75,9 +76,11 @@ public interface CustomerDao {
 	 * @return
 	 */
 	List<PurchaseMaster> getPurchaseMaster(int userId);
-	
-	PurchaseMaster getPurchaseMasterByUserId(int userId, int orderId);
-	
+
+	List<PurchaseMaster> getPurchaseMasterForAdmin();
+
+	PurchaseMaster getPurchaseMasterByUserId(int orderId);
+
 	PurchaseMaster getLatestPurchaseMaster(int userId);
 
 	/**
@@ -123,7 +126,11 @@ public interface CustomerDao {
 	 * @return
 	 */
 	Cart getProductsFromCart(int userId);
-	
+
 	void emptyCart(int userId);
+	
+	boolean assignDriverToOrder(int orderId, int driverId);
+	
+	List<Feedback> viewAllFeedbacks();
 
 }

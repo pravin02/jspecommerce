@@ -30,6 +30,7 @@ CREATE TABLE `feedback` (
   `feedbackId` int(10) unsigned NOT NULL auto_increment,
   `userId` int(10) unsigned NOT NULL default '0',
   `feedback` varchar(1000) NOT NULL default '',
+  `datetime` timestamp NOT NULL default CURRENT_TIMESTAMP,
   PRIMARY KEY  (`feedbackId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -38,8 +39,10 @@ CREATE TABLE `feedback` (
 --
 
 /*!40000 ALTER TABLE `feedback` DISABLE KEYS */;
-INSERT INTO `feedback` (`feedbackId`,`userId`,`feedback`) VALUES 
- (5,2,'Welcome');
+INSERT INTO `feedback` (`feedbackId`,`userId`,`feedback`,`datetime`) VALUES 
+ (5,2,'Welcome','2021-01-01 01:01:01'),
+ (6,2,'welcome','2021-01-01 01:01:01'),
+ (7,2,'Notice that you must repeat the column name. Also, make sure you are using backticks instead of single quotes to escape the column name time, which prevents it from being interpreted as the mysql column type of time.','2022-02-07 20:13:33');
 /*!40000 ALTER TABLE `feedback` ENABLE KEYS */;
 
 
@@ -134,7 +137,6 @@ CREATE TABLE `purchasedetails` (
   `productId` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
   `price` float NOT NULL,
-  `totalAmount` float NOT NULL,
   PRIMARY KEY  (`purchaseDetailId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -143,6 +145,11 @@ CREATE TABLE `purchasedetails` (
 --
 
 /*!40000 ALTER TABLE `purchasedetails` DISABLE KEYS */;
+INSERT INTO `purchasedetails` (`purchaseDetailId`,`purchaseMasterId`,`productId`,`quantity`,`price`) VALUES 
+ (1,3,1,1,80000),
+ (2,4,2,1,100000),
+ (3,5,1,1,80000),
+ (4,5,2,2,100000);
 /*!40000 ALTER TABLE `purchasedetails` ENABLE KEYS */;
 
 
@@ -154,11 +161,11 @@ DROP TABLE IF EXISTS `purchasemaster`;
 CREATE TABLE `purchasemaster` (
   `purchaseMasterId` int(11) NOT NULL auto_increment,
   `userId` int(11) NOT NULL,
-  `shippingAddressId` int(11) NOT NULL,
-  `finalAmount` float NOT NULL,
-  `finalQuantity` int(11) NOT NULL,
-  `discount` float NOT NULL,
+  `shippingAddress` varchar(400) NOT NULL default '',
   `purchaseDate` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  `driverId` int(10) unsigned NOT NULL default '0',
+  `contact` varchar(45) NOT NULL default '',
+  `status` varchar(45) NOT NULL default 'Order Placed',
   PRIMARY KEY  (`purchaseMasterId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -167,28 +174,11 @@ CREATE TABLE `purchasemaster` (
 --
 
 /*!40000 ALTER TABLE `purchasemaster` DISABLE KEYS */;
+INSERT INTO `purchasemaster` (`purchaseMasterId`,`userId`,`shippingAddress`,`purchaseDate`,`driverId`,`contact`,`status`) VALUES 
+ (3,2,'Hadapsar, Sasane Nagar, 411028, Maharashtra','2022-02-07 17:45:28',3,'07276622442','Driver Assigned'),
+ (4,2,'Hadapsar, Sasane Nagar, 411028, Maharashtra','2022-02-07 17:48:43',0,'07276622442','Order Placed'),
+ (5,2,'Hadapsar, Sasane Nagar, 424201, Maharashtra','2022-02-07 17:49:34',0,'7276622442','Order Placed');
 /*!40000 ALTER TABLE `purchasemaster` ENABLE KEYS */;
-
-
---
--- Table structure for table `ecommerce`.`shippingaddress`
---
-
-DROP TABLE IF EXISTS `shippingaddress`;
-CREATE TABLE `shippingaddress` (
-  `shippingAddressId` int(11) NOT NULL auto_increment,
-  `userId` int(11) NOT NULL,
-  `city` varchar(100) NOT NULL,
-  `address` varchar(300) NOT NULL,
-  PRIMARY KEY  (`shippingAddressId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `ecommerce`.`shippingaddress`
---
-
-/*!40000 ALTER TABLE `shippingaddress` DISABLE KEYS */;
-/*!40000 ALTER TABLE `shippingaddress` ENABLE KEYS */;
 
 
 --
@@ -209,8 +199,6 @@ CREATE TABLE `shoppingcart` (
 --
 
 /*!40000 ALTER TABLE `shoppingcart` DISABLE KEYS */;
-INSERT INTO `shoppingcart` (`cartId`,`userId`,`productId`,`quantity`) VALUES 
- (8,2,1,1);
 /*!40000 ALTER TABLE `shoppingcart` ENABLE KEYS */;
 
 
@@ -239,73 +227,10 @@ CREATE TABLE `user` (
 INSERT INTO `user` (`userId`,`emailId`,`password`,`fullName`,`mobileNumber`,`gender`,`dob`,`type`) VALUES 
  (1,'ppp@gmail.com','ppp','Pravin P Patil','1234567890','MALE','01-01-2022','Admin'),
  (2,'test@gmail.com','new','Tester','1234567890','MALE','01-11-1212','Farmer'),
- (3,'driver@gmail.com','driver','Driver','1234567890','MALE','01-01-2022','Driver');
+ (3,'driver@gmail.com','driver','Omkar Patil','1234567890','MALE','01-01-2022','Driver'),
+ (4,'driver2@gmail.com','driver2','Sunil','1212121212','MALE','01-01-2022','Driver');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
-
---
--- Procedure `ecommerce`.`addPurchaseDetail`
---
-
-DROP PROCEDURE IF EXISTS `addPurchaseDetail`;
-DELIMITER $$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `addPurchaseDetail`(
-IN p_purchaseMasterId INT, 
-IN p_productId INT, 
-IN p_quantity INT, 
-IN p_price FLOAT, 
-IN p_totalAmount FLOAT)
-BEGIN
-
-		INSERT INTO purchaseDetails(purchaseMasterId, productId, quantity, price, totalAmount)
-        VALUES(p_purchaseMasterId, p_productId, p_quantity, p_price, p_totalAmount);
-        
-        SELECT LAST_INSERT_ID() AS id;
-END $$
-
-DELIMITER ;
-
---
--- Procedure `ecommerce`.`addPurchaseMaster`
---
-
-DROP PROCEDURE IF EXISTS `addPurchaseMaster`;
-DELIMITER $$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `addPurchaseMaster`(
-IN p_userId INT, 
-IN p_shippingAddressId INT, 
-IN p_finalAmount FLOAT, 
-IN p_finalQuantity INT, 
-IN p_discount FLOAT)
-BEGIN
-
-		INSERT INTO purchaseMaster(userId, shippingAddressId, finalAmount, finalQuantity, discount)
-        VALUES(p_userId, p_shippingAddressId, p_finalAmount, p_finalQuantity, p_discount);
-        
-        
-END $$
-
-DELIMITER ;
-
---
--- Procedure `ecommerce`.`addShippingAddress`
---
-
-DROP PROCEDURE IF EXISTS `addShippingAddress`;
-DELIMITER $$
-
-CREATE DEFINER=`root`@`localhost` PROCEDURE `addShippingAddress`(
-IN p_userId INT,
-IN p_city varchar(100),
-IN p_address varchar(300))
-BEGIN
-	insert into shippingaddress(userId,city,address)
-    values(p_userId,p_city,p_address);
-END $$
-
-DELIMITER ;
 
 --
 -- Procedure `ecommerce`.`addToCart`
@@ -315,12 +240,12 @@ DROP PROCEDURE IF EXISTS `addToCart`;
 DELIMITER $$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `addToCart`(IN p_userId INT,IN p_productId INT,IN p_quantity INTEGER)
-BEGIN
-
-	insert into shoppingcart(userId,productId,quantity)values(p_userId,p_productId,p_quantity);
-
-  
-
+BEGIN
+  SET @v_count = 0;
+  select count(quantity) into @v_count from shoppingcart where userId = p_userId and productId = p_productId;
+  if (@v_count <= 0)  then
+  	insert into shoppingcart(userId,productId,quantity)values(p_userId,p_productId,p_quantity);
+  end if;
 END $$
 
 DELIMITER ;

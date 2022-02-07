@@ -50,54 +50,73 @@ public class EcommerceServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
 		if ("purchaseProduct".equalsIgnoreCase(action.trim())) {
-			try {
-				String contact = request.getParameter("contact");
-				String address = request.getParameter("address");
-				String pinCode = request.getParameter("pinCode");
-				String state = request.getParameter("state");
-				User user = (User) request.getSession().getAttribute(GlobalConstants.USER_DETAILS);
-				Cart cart = this.customerDao.getProductsFromCart(user.getUserId());
+			this.purchaseProduct(request, response);
+		} else if ("assignDriver".equalsIgnoreCase(action)) {
+			System.out.println("in action");
+			this.assignDriver(request, response);
+		}
+	}
 
-				System.out.println("Contact Number " + contact);
-				System.out.println("Address " + address);
-				System.out.println("pinCode " + pinCode);
-				System.out.println("State " + state);
-				System.out.println("Contact Number " + user.getUserId());
-				System.out.println("No of items in cart " + cart.getProducts().size());
+	public void assignDriver(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		int driverId = Integer.parseInt(request.getParameter("driverId"));
+		int orderId = Integer.parseInt(request.getParameter("orderId"));
+		this.customerDao.assignDriverToOrder(orderId, driverId);
+		System.out.println("Order assigned");
+		request.setAttribute("message", "Driver Assigned to order");
+		response.sendRedirect("admin-order-product-details.jsp?orderId=" + orderId);
+	}
 
-				List<Product> productList = cart.getProducts();
+	public void purchaseProduct(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-				System.out.println("No of product in cart " + productList.size());
+		try {
+			String contact = request.getParameter("contact");
+			String address = request.getParameter("address");
+			String pinCode = request.getParameter("pinCode");
+			String state = request.getParameter("state");
+			User user = (User) request.getSession().getAttribute(GlobalConstants.USER_DETAILS);
+			Cart cart = this.customerDao.getProductsFromCart(user.getUserId());
 
-				PurchaseMaster purchaseMaster = new PurchaseMaster();
-				purchaseMaster.setUserId(user.getUserId());
-				purchaseMaster.setShippingAddress(address + ", " + pinCode + ", " + state);
-				purchaseMaster.setContact(contact);
-				System.out.println(purchaseMaster);
+			System.out.println("Contact Number " + contact);
+			System.out.println("Address " + address);
+			System.out.println("pinCode " + pinCode);
+			System.out.println("State " + state);
+			System.out.println("Contact Number " + user.getUserId());
+			System.out.println("No of items in cart " + cart.getProducts().size());
 
-				this.customerDao.addPurchaseMaster(purchaseMaster);
-				purchaseMaster = this.customerDao.getLatestPurchaseMaster(user.getUserId());
-				int purchaseMasterId = purchaseMaster.getPurchaseMasterId();
-				System.out.println("pmid " + purchaseMasterId);
+			List<Product> productList = cart.getProducts();
 
-				List<PurchaseDetail> pdList = productList.stream().map(p -> new PurchaseDetail(purchaseMasterId, p))
-						.collect(Collectors.toList());
-				System.out.println("pdlist " + pdList.size());
+			System.out.println("No of product in cart " + productList.size());
 
-				pdList.stream().forEach(pd -> {
-					this.customerDao.addPurchaseDetail(pd);
-				});
-				System.out.println("pdlist added");
-				this.customerDao.emptyCart(user.getUserId());
-				System.out.println("cart empty ");
-				request.setAttribute("message", "Order Placed successfully");
-				response.sendRedirect("checkout.jsp");
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("error " + e.getMessage());
-				request.setAttribute("message", "Error while placing order " + e.getMessage());
-				response.sendRedirect("checkout.jsp");
-			}
+			PurchaseMaster purchaseMaster = new PurchaseMaster();
+			purchaseMaster.setUserId(user.getUserId());
+			purchaseMaster.setShippingAddress(address + ", " + pinCode + ", " + state);
+			purchaseMaster.setContact(contact);
+			System.out.println(purchaseMaster);
+
+			this.customerDao.addPurchaseMaster(purchaseMaster);
+			purchaseMaster = this.customerDao.getLatestPurchaseMaster(user.getUserId());
+			int purchaseMasterId = purchaseMaster.getPurchaseMasterId();
+			System.out.println("pmid " + purchaseMasterId);
+
+			List<PurchaseDetail> pdList = productList.stream().map(p -> new PurchaseDetail(purchaseMasterId, p))
+					.collect(Collectors.toList());
+			System.out.println("pdlist " + pdList.size());
+
+			pdList.stream().forEach(pd -> {
+				this.customerDao.addPurchaseDetail(pd);
+			});
+			System.out.println("pdlist added");
+			this.customerDao.emptyCart(user.getUserId());
+			System.out.println("cart empty ");
+			request.setAttribute("message", "Order Placed successfully");
+			response.sendRedirect("checkout.jsp");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("error " + e.getMessage());
+			request.setAttribute("message", "Error while placing order " + e.getMessage());
+			response.sendRedirect("checkout.jsp");
 		}
 	}
 

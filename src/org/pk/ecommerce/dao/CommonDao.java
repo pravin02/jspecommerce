@@ -1,5 +1,7 @@
 package org.pk.ecommerce.dao;
 
+import java.util.List;
+
 import org.pk.ecommerce.entities.user.User;
 
 /**
@@ -60,7 +62,14 @@ public interface CommonDao {
 	 * @param userId
 	 * @return
 	 */
-	User getUserByUserId(String emailId);
+	User getUserByEmailId(String emailId);
+	
+	/**
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	User getUserByUserId(int userId);
 
 	/**
 	 * 
@@ -69,5 +78,7 @@ public interface CommonDao {
 	 * @return
 	 */
 	boolean submitFeedback(int userId, String feedback);
+	
+	List<User> getAllDrivers();
 
 }
