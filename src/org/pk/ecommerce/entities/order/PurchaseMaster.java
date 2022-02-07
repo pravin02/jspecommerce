@@ -6,79 +6,97 @@ import java.util.List;
 public class PurchaseMaster {
 
 	private int userId;
+	private int driverId;
 	private int purchaseMasterId;
-	private int shippingAddressId;
-	private int finalQuantity;
-	private float finalAmount;
-	private float discount;
+	private String shippingAddress;
+	private String contact;
+	private String status;
 	private Timestamp purchaseDateTime;
 
 	private List<PurchaseDetail> purchaseDetails;
 
 	/**
-	 * @return
+	 * @return the userId
 	 */
 	public int getUserId() {
 		return userId;
 	}
 
+	/**
+	 * @param userId the userId to set
+	 */
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 
+	/**
+	 * @return the driverId
+	 */
+	public int getDriverId() {
+		return driverId;
+	}
+
+	/**
+	 * @param driverId the driverId to set
+	 */
+	public void setDriverId(int driverId) {
+		this.driverId = driverId;
+	}
+
+	/**
+	 * @return the purchaseMasterId
+	 */
 	public int getPurchaseMasterId() {
 		return purchaseMasterId;
 	}
 
+	/**
+	 * @param purchaseMasterId the purchaseMasterId to set
+	 */
 	public void setPurchaseMasterId(int purchaseMasterId) {
 		this.purchaseMasterId = purchaseMasterId;
 	}
 
-	public int getShippingAddressId() {
-		return shippingAddressId;
-	}
-
-	public void setShippingAddressId(int shippingAddressId) {
-		this.shippingAddressId = shippingAddressId;
-	}
-
-	public int getFinalQuantity() {
-		return finalQuantity;
-	}
-
-	public void setFinalQuantity(int finalQuantity) {
-		this.finalQuantity = finalQuantity;
-	}
-
-	public float getFinalAmount() {
-		return finalAmount;
-	}
-
-	public void setFinalAmount(float finalAmount) {
-		this.finalAmount = finalAmount;
-	}
-
-	public float getDiscount() {
-		return discount;
-	}
-
-	public void setDiscount(float discount) {
-		this.discount = discount;
+	/**
+	 * @return the shippingAddress
+	 */
+	public String getShippingAddress() {
+		return shippingAddress;
 	}
 
 	/**
-	 * @return the purchaseDetails
+	 * @param shippingAddress the shippingAddress to set
 	 */
-	public List<PurchaseDetail> getPurchaseDetails() {
-		return purchaseDetails;
+	public void setShippingAddress(String shippingAddress) {
+		this.shippingAddress = shippingAddress;
 	}
 
 	/**
-	 * @param purchaseDetails
-	 *            the purchaseDetails to set
+	 * @return the contact
 	 */
-	public void setPurchaseDetails(List<PurchaseDetail> purchaseDetails) {
-		this.purchaseDetails = purchaseDetails;
+	public String getContact() {
+		return contact;
+	}
+
+	/**
+	 * @param contact the contact to set
+	 */
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+
+	/**
+	 * @return the status
+	 */
+	public String getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 	/**
@@ -89,26 +107,24 @@ public class PurchaseMaster {
 	}
 
 	/**
-	 * @param purchaseDateTime
-	 *            the purchaseDateTime to set
+	 * @param purchaseDateTime the purchaseDateTime to set
 	 */
 	public void setPurchaseDateTime(Timestamp purchaseDateTime) {
 		this.purchaseDateTime = purchaseDateTime;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#toString()
+	/**
+	 * @return the purchaseDetails
 	 */
-	@Override
-	public String toString() {
-		return "PurchaseMaster [userId=" + userId + ", purchaseMasterId="
-				+ purchaseMasterId + ", shippingAddressId=" + shippingAddressId
-				+ ", finalQuantity=" + finalQuantity + ", finalAmount="
-				+ finalAmount + ", discount=" + discount
-				+ ", purchaseDetails.size="
-				+ (purchaseDetails != null ? purchaseDetails.size() : 0)+ "]";
+	public List<PurchaseDetail> getPurchaseDetails() {
+		return purchaseDetails;
+	}
+
+	/**
+	 * @param purchaseDetails the purchaseDetails to set
+	 */
+	public void setPurchaseDetails(List<PurchaseDetail> purchaseDetails) {
+		this.purchaseDetails = purchaseDetails;
 	}
 
 }

@@ -102,6 +102,7 @@ private CustomerDao customerDao;
 								<%
 									} else {
 								%>
+								<li><a href="orders.jsp"><i class="fa fa-shop"></i>Orders</a></li>
 								<li><a href="submitFeedback.jsp"><i class="fa fa-lock"></i>Feedback</a></li>
 								<li><a href="login.jsp"><i class="fa fa-lock"></i> Log
 										out</a></li>
@@ -217,7 +218,7 @@ private CustomerDao customerDao;
 				</div>
 				<div class="col-sm-5">
 					<div class="product-information">
-						<form action="addToCart.jsp" method="post">
+						<form action="addToCart.jsp" method="get">
 							<span> 
 								<span><%=product.getPrice() %></span>
 								 <label>Quantity:</label>

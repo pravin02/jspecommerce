@@ -53,19 +53,16 @@ public class CustomerDaoImpl implements CustomerDao {
 	@Override
 	public List<Category> getAllCategories() {
 		String SQL = "{CALL getAllCategories()}";
-		List<Category> list = jdbcTemplateObject.query(SQL,
-				new RowMapper<Category>() {
-					@Override
-					public Category mapRow(java.sql.ResultSet rs, int rowMap)
-							throws SQLException {
-						Category object = new Category();
-						object.setCategoryId(rs.getInt("categoryId"));
-						object.setCategoryName(rs.getString("categoryName"));
-						object.setSubCategories(getSubCategoriesByCategoryId(rs
-								.getInt("categoryId")));
-						return object;
-					}
-				});
+		List<Category> list = jdbcTemplateObject.query(SQL, new RowMapper<Category>() {
+			@Override
+			public Category mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
+				Category object = new Category();
+				object.setCategoryId(rs.getInt("categoryId"));
+				object.setCategoryName(rs.getString("categoryName"));
+				object.setSubCategories(getSubCategoriesByCategoryId(rs.getInt("categoryId")));
+				return object;
+			}
+		});
 
 		// return jdbcTemplateObject.update("") == 1 ? true: false;
 		return (list != null && !list.isEmpty()) ? list : null;
@@ -80,19 +77,16 @@ public class CustomerDaoImpl implements CustomerDao {
 	@Override
 	public List<SubCategory> getAllSubCategories() {
 		String SQL = "{CALL getAllSubCategories()}";
-		List<SubCategory> list = jdbcTemplateObject.query(SQL,
-				new RowMapper<SubCategory>() {
-					@Override
-					public SubCategory mapRow(java.sql.ResultSet rs, int rowMap)
-							throws SQLException {
-						SubCategory object = new SubCategory();
-						object.setSubCategoryId(rs.getInt("subCategoryId"));
-						object.setSubCategoryName(rs
-								.getString("subCategoryName"));
-						object.setDescription(rs.getString("description"));
-						return object;
-					}
-				});
+		List<SubCategory> list = jdbcTemplateObject.query(SQL, new RowMapper<SubCategory>() {
+			@Override
+			public SubCategory mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
+				SubCategory object = new SubCategory();
+				object.setSubCategoryId(rs.getInt("subCategoryId"));
+				object.setSubCategoryName(rs.getString("subCategoryName"));
+				object.setDescription(rs.getString("description"));
+				return object;
+			}
+		});
 		// return jdbcTemplateObject.update("") == 1 ? true: false;
 		return (list != null && !list.isEmpty()) ? list : null;
 	}
@@ -105,19 +99,16 @@ public class CustomerDaoImpl implements CustomerDao {
 	@Override
 	public List<SubCategory> getSubCategoriesByCategoryId(int categoryId) {
 		String SQL = "{CALL getSubCategoriesByCategoryId(?)}";
-		List<SubCategory> list = jdbcTemplateObject.query(SQL,
-				new RowMapper<SubCategory>() {
-					@Override
-					public SubCategory mapRow(java.sql.ResultSet rs, int rowMap)
-							throws SQLException {
-						SubCategory object = new SubCategory();
-						object.setSubCategoryId(rs.getInt("subCategoryId"));
-						object.setSubCategoryName(rs
-								.getString("subCategoryName"));
+		List<SubCategory> list = jdbcTemplateObject.query(SQL, new RowMapper<SubCategory>() {
+			@Override
+			public SubCategory mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
+				SubCategory object = new SubCategory();
+				object.setSubCategoryId(rs.getInt("subCategoryId"));
+				object.setSubCategoryName(rs.getString("subCategoryName"));
 
-						return object;
-					}
-				}, categoryId);
+				return object;
+			}
+		}, categoryId);
 
 		// return jdbcTemplateObject.update("") == 1 ? true: false;
 		return (list != null && !list.isEmpty()) ? list : null;
@@ -127,31 +118,28 @@ public class CustomerDaoImpl implements CustomerDao {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.pk.ecommerce.dao.CustomerDao#getProductList(int,
-	 * java.lang.String, float)
+	 * @see org.pk.ecommerce.dao.CustomerDao#getProductList(int, java.lang.String,
+	 * float)
 	 */
 
 	@Override
-	public List<Product> getAllProductList(int subCategoryId,
-			String productName, double priceRange) {
+	public List<Product> getAllProductList(int subCategoryId, String productName, double priceRange) {
 		String SQL = "{CALL getAllProductList(?, ?, ?)}";
-		List<Product> list = jdbcTemplateObject.query(SQL,
-				new RowMapper<Product>() {
-					@Override
-					public Product mapRow(java.sql.ResultSet rs, int rowMap)
-							throws SQLException {
-						Product object = new Product();
-						object.setProductId(rs.getInt("productId"));
-						object.setProductName(rs.getString("productName"));
-						object.setPrice(rs.getDouble("price"));
-						object.setImageNamePath(rs.getString("imageNamePath"));
-						object.setQuantity(rs.getInt("quantity"));
-						object.setDiscount(rs.getDouble("discount"));
-						object.setDescription(rs.getString("description"));
+		List<Product> list = jdbcTemplateObject.query(SQL, new RowMapper<Product>() {
+			@Override
+			public Product mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
+				Product object = new Product();
+				object.setProductId(rs.getInt("productId"));
+				object.setProductName(rs.getString("productName"));
+				object.setPrice(rs.getDouble("price"));
+				object.setImageNamePath(rs.getString("imageNamePath"));
+				object.setQuantity(rs.getInt("quantity"));
+				object.setDiscount(rs.getDouble("discount"));
+				object.setDescription(rs.getString("description"));
 
-						return object;
-					}
-				}, subCategoryId, productName, priceRange);
+				return object;
+			}
+		}, subCategoryId, productName, priceRange);
 
 		// return jdbcTemplateObject.update("") == 1 ? true: false;
 		return (list != null && !list.isEmpty()) ? list : null;
@@ -167,14 +155,9 @@ public class CustomerDaoImpl implements CustomerDao {
 	 */
 	@Override
 	public boolean addPurchaseMaster(PurchaseMaster purchaseMaster) {
-		String SQL = "{CALL addPurchaseMaster(?, ?, ?, ?, ?)}";
-		return jdbcTemplateObject.update(
-				SQL,
-				new Object[] { purchaseMaster.getUserId(),
-						purchaseMaster.getShippingAddressId(),
-						purchaseMaster.getFinalAmount(),
-						purchaseMaster.getFinalQuantity(),
-						purchaseMaster.getDiscount() }) == 1 ? true : false;
+		String SQL = "INSERT INTO PURCHASEMASTER(userId, shippingAddress, contact) VALUES(?,?,?)";
+		return jdbcTemplateObject.update(SQL, new Object[] { purchaseMaster.getUserId(),
+				purchaseMaster.getShippingAddress(), purchaseMaster.getContact() }) == 1 ? true : false;
 
 	}
 
@@ -187,14 +170,58 @@ public class CustomerDaoImpl implements CustomerDao {
 	 */
 	@Override
 	public boolean addPurchaseDetail(PurchaseDetail purchaseDetail) {
-		String SQL = "{CALL addPurchaseDetail(?, ?, ?, ?, ?)}";
-		return jdbcTemplateObject.update(
-				SQL,
-				new Object[] { purchaseDetail.getPurchaseMasterId(),
-						purchaseDetail.getProductId(),
-						purchaseDetail.getQuantity(),
-						purchaseDetail.getPrice(),
-						purchaseDetail.getTotalAmount() }) == 1 ? true : false;
+		String SQL = "INSERT INTO purchasedetails(purchaseMasterId, productId, quantity, price) VALUES(?,?,?,?)";
+		return jdbcTemplateObject.update(SQL, new Object[] { purchaseDetail.getPurchaseMasterId(),
+				purchaseDetail.getProductId(), purchaseDetail.getQuantity(), purchaseDetail.getPrice() }) == 1 ? true
+						: false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.pk.ecommerce.dao.CustomerDao#getPurchaseEntries(int)
+	 */
+	@Override
+	public PurchaseMaster getLatestPurchaseMaster(int userId) {
+		String SQL = "SELECT * FROM purchasemaster where userId=? and status <> 'Delivered' order by purchaseDate desc limit 1";
+		List<PurchaseMaster> list = jdbcTemplateObject.query(SQL, new RowMapper<PurchaseMaster>() {
+			@Override
+			public PurchaseMaster mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
+				PurchaseMaster object = new PurchaseMaster();
+				object.setPurchaseMasterId(rs.getInt("purchaseMasterId"));
+				object.setUserId(rs.getInt("userId"));
+				object.setShippingAddress(rs.getString("shippingAddress"));
+				object.setContact(rs.getString("contact"));
+				object.setPurchaseDetails(getPurchaseDetails(rs.getInt("purchaseMasterId")));
+				object.setPurchaseDateTime(rs.getTimestamp("purchaseDate"));
+				object.setStatus(rs.getString("status"));
+				return object;
+			}
+		}, userId);
+
+		return (list != null && !list.isEmpty()) ? list.get(0) : null;
+
+	}
+
+	@Override
+	public PurchaseMaster getPurchaseMasterByUserId(int userId, int orderId) {
+		String SQL = "SELECT * FROM purchasemaster where purchaseMasterId=? and userId=?";
+		List<PurchaseMaster> list = jdbcTemplateObject.query(SQL, new RowMapper<PurchaseMaster>() {
+			@Override
+			public PurchaseMaster mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
+				PurchaseMaster object = new PurchaseMaster();
+				object.setPurchaseMasterId(rs.getInt("purchaseMasterId"));
+				object.setUserId(rs.getInt("userId"));
+				object.setShippingAddress(rs.getString("shippingAddress"));
+				object.setContact(rs.getString("contact"));
+				object.setPurchaseDetails(getPurchaseDetails(rs.getInt("purchaseMasterId")));
+				object.setPurchaseDateTime(rs.getTimestamp("purchaseDate"));
+				object.setStatus(rs.getString("status"));
+				return object;
+			}
+		}, orderId, userId);
+
+		return (list != null && !list.isEmpty()) ? list.get(0) : null;
 	}
 
 	/*
@@ -205,27 +232,20 @@ public class CustomerDaoImpl implements CustomerDao {
 	@Override
 	public List<PurchaseMaster> getPurchaseMaster(int userId) {
 		String SQL = "{CALL getPurchaseMaster(?)}";
-		List<PurchaseMaster> list = jdbcTemplateObject.query(SQL,
-				new RowMapper<PurchaseMaster>() {
-					@Override
-					public PurchaseMaster mapRow(java.sql.ResultSet rs,
-							int rowMap) throws SQLException {
-						PurchaseMaster object = new PurchaseMaster();
-						object.setPurchaseMasterId(rs
-								.getInt("purchaseMasterId"));
-						object.setUserId(rs.getInt("userId"));
-						object.setShippingAddressId(rs
-								.getInt("shippingAddressId"));
-						object.setFinalAmount(rs.getFloat("finalAmount"));
-						object.setFinalQuantity(rs.getInt("finalQuantity"));
-						object.setPurchaseDetails(getPurchaseDetails(rs
-								.getInt("purchaseMasterId")));
-						object.setDiscount(rs.getFloat("discount"));
-						object.setPurchaseDateTime(rs
-								.getTimestamp("purchaseDate"));
-						return object;
-					}
-				}, userId);
+		List<PurchaseMaster> list = jdbcTemplateObject.query(SQL, new RowMapper<PurchaseMaster>() {
+			@Override
+			public PurchaseMaster mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
+				PurchaseMaster object = new PurchaseMaster();
+				object.setPurchaseMasterId(rs.getInt("purchaseMasterId"));
+				object.setUserId(rs.getInt("userId"));
+				object.setShippingAddress(rs.getString("shippingAddress"));
+				object.setContact(rs.getString("contact"));
+				object.setPurchaseDetails(getPurchaseDetails(rs.getInt("purchaseMasterId")));
+				object.setPurchaseDateTime(rs.getTimestamp("purchaseDate"));
+				object.setStatus(rs.getString("status"));
+				return object;
+			}
+		}, userId);
 
 		return (list != null && !list.isEmpty()) ? list : null;
 
@@ -234,53 +254,46 @@ public class CustomerDaoImpl implements CustomerDao {
 	@Override
 	public List<PurchaseDetail> getPurchaseDetails(int purchaseMasterId) {
 		String SQL = "{CALL getPurchaseDetails(?)}";
-		List<PurchaseDetail> list = jdbcTemplateObject.query(SQL,
-				new RowMapper<PurchaseDetail>() {
-					@Override
-					public PurchaseDetail mapRow(java.sql.ResultSet rs,
-							int rowMap) throws SQLException {
-						PurchaseDetail object = new PurchaseDetail();
-						object.setPurchaseMasterId(rs
-								.getInt("purchaseMasterId"));
-						object.setPurchaseDetailId(rs
-								.getInt("purchaseDetailId"));
-						object.setProductId(rs.getInt("productId"));
-						object.setQuantity(rs.getInt("quantity"));
-						object.setPrice(rs.getFloat("price"));
-						object.setTotalAmount(rs.getFloat("totalAmount"));
-						object.setProduct(getProduct(rs.getInt("productId")));
-						return object;
-					}
-				}, purchaseMasterId);
+		List<PurchaseDetail> list = jdbcTemplateObject.query(SQL, new RowMapper<PurchaseDetail>() {
+			@Override
+			public PurchaseDetail mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
+				PurchaseDetail object = new PurchaseDetail();
+				object.setPurchaseMasterId(rs.getInt("purchaseMasterId"));
+				object.setPurchaseDetailId(rs.getInt("purchaseDetailId"));
+				object.setProductId(rs.getInt("productId"));
+				object.setQuantity(rs.getInt("quantity"));
+				object.setPrice(rs.getFloat("price"));
+				object.setProduct(getProduct(rs.getInt("productId")));
+				return object;
+			}
+		}, purchaseMasterId);
 		return (list != null && !list.isEmpty()) ? list : null;
 	}
 
 	@Override
 	public Product getProduct(int productId) {
 		String SQL = "{CALL getProductById(?)}";
-		List<Product> list = jdbcTemplateObject.query(SQL,
-				new RowMapper<Product>() {
-					@Override
-					public Product mapRow(java.sql.ResultSet rs, int rowMap)
-							throws SQLException {
-						Product object = new Product();
-						object.setProductId(rs.getInt("productId"));
-						object.setProductName(rs.getString("productName"));
-						object.setPrice(rs.getDouble("price"));
-						object.setImageNamePath(rs.getString("imageNamePath"));
-						object.setQuantity(rs.getInt("quantity"));
-						object.setDiscount(rs.getDouble("discount"));
-						object.setDescription(rs.getString("description"));
-						object.setSubCategory(getSubCategory(rs.getInt("subCategoryId")));
+		List<Product> list = jdbcTemplateObject.query(SQL, new RowMapper<Product>() {
+			@Override
+			public Product mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
+				Product object = new Product();
+				object.setProductId(rs.getInt("productId"));
+				object.setProductName(rs.getString("productName"));
+				object.setPrice(rs.getDouble("price"));
+				object.setImageNamePath(rs.getString("imageNamePath"));
+				object.setQuantity(rs.getInt("quantity"));
+				object.setDiscount(rs.getDouble("discount"));
+				object.setDescription(rs.getString("description"));
+				object.setSubCategory(getSubCategory(rs.getInt("subCategoryId")));
 
-						SubCategory subCategory = new SubCategory();
-						subCategory.setSubCategoryId(rs.getInt("subCategoryId"));
-						subCategory.setSubCategoryName(rs.getString("subCategoryName"));
-						subCategory.setDescription(rs.getString("description"));
+				SubCategory subCategory = new SubCategory();
+				subCategory.setSubCategoryId(rs.getInt("subCategoryId"));
+				subCategory.setSubCategoryName(rs.getString("subCategoryName"));
+				subCategory.setDescription(rs.getString("description"));
 
-						return object;
-					}
-				}, productId);
+				return object;
+			}
+		}, productId);
 
 		return (list != null && !list.isEmpty()) ? list.get(0) : null;
 
@@ -295,21 +308,18 @@ public class CustomerDaoImpl implements CustomerDao {
 	public SubCategory getSubCategory(int subCategoryId) {
 
 		String SQL = "{CALL getSubCategory(?)}";
-		List<SubCategory> list = jdbcTemplateObject.query(SQL,
-				new RowMapper<SubCategory>() {
-					@Override
-					public SubCategory mapRow(java.sql.ResultSet rs, int rowMap)
-							throws SQLException {
+		List<SubCategory> list = jdbcTemplateObject.query(SQL, new RowMapper<SubCategory>() {
+			@Override
+			public SubCategory mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
 
-						SubCategory object = new SubCategory();
-						object.setSubCategoryId(rs.getInt("subCategoryId"));
-						object.setSubCategoryName(rs
-								.getString("subCategoryName"));
-						object.setDescription(rs.getString("description"));
+				SubCategory object = new SubCategory();
+				object.setSubCategoryId(rs.getInt("subCategoryId"));
+				object.setSubCategoryName(rs.getString("subCategoryName"));
+				object.setDescription(rs.getString("description"));
 
-						return object;
-					}
-				}, subCategoryId);
+				return object;
+			}
+		}, subCategoryId);
 
 		return (list != null && !list.isEmpty()) ? list.get(0) : null;
 	}
@@ -321,19 +331,17 @@ public class CustomerDaoImpl implements CustomerDao {
 	 */
 	public Category getCategory(int categoryId) {
 		String SQL = "{CALL getCategory(?)}";
-		List<Category> list = jdbcTemplateObject.query(SQL,
-				new RowMapper<Category>() {
-					@Override
-					public Category mapRow(java.sql.ResultSet rs, int rowMap)
-							throws SQLException {
+		List<Category> list = jdbcTemplateObject.query(SQL, new RowMapper<Category>() {
+			@Override
+			public Category mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
 
-						Category object = new Category();
-						object.setCategoryId(rs.getInt("categoryId"));
-						object.setCategoryName(rs.getString("categoryName"));
+				Category object = new Category();
+				object.setCategoryId(rs.getInt("categoryId"));
+				object.setCategoryName(rs.getString("categoryName"));
 
-						return object;
-					}
-				}, categoryId);
+				return object;
+			}
+		}, categoryId);
 
 		return (list != null && !list.isEmpty()) ? list.get(0) : null;
 	}
@@ -341,18 +349,17 @@ public class CustomerDaoImpl implements CustomerDao {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.pk.ecommerce.dao.CustomerDao#addToCart(org.pk.ecommerce.entities.
+	 * @see org.pk.ecommerce.dao.CustomerDao#addToCart(org.pk.ecommerce.entities.
 	 * product.Cart)
 	 */
 
 	@Override
 	public boolean addToCart(Cart cart) {
 		String SQL = "{CALL addToCart(?, ?, ?)}";
-		return jdbcTemplateObject.update(SQL, new Object[] { cart.getUserId(),
-				cart.getProductId(), cart.getQuantity() }) == 1 ? true : false;
+		return jdbcTemplateObject.update(SQL,
+				new Object[] { cart.getUserId(), cart.getProductId(), cart.getQuantity() }) == 1 ? true : false;
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -364,46 +371,37 @@ public class CustomerDaoImpl implements CustomerDao {
 	@Override
 	public boolean removeFromCart(Cart cart) {
 		String SQL = "{CALL removeFromCart(?, ?)}";
-		return jdbcTemplateObject.update(SQL, new Object[] { cart.getUserId(),
-				cart.getProductId()}) == 1 ? true : false;
+		return jdbcTemplateObject.update(SQL, new Object[] { cart.getUserId(), cart.getProductId() }) == 1 ? true
+				: false;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.pk.ecommerce.dao.CustomerDao#addShippingAddress(org.pk.ecommerce.
+	 * @see org.pk.ecommerce.dao.CustomerDao#addShippingAddress(org.pk.ecommerce.
 	 * entities.user.ShippingAddress)
 	 */
 	@Override
 	public boolean addShippingAddress(ShippingAddress shippingAddress) {
 		String SQL = "{CALL addShippingAddress(?, ?, ?)}";
-		return jdbcTemplateObject
-				.update(SQL,
-						new Object[] { shippingAddress.getUserId(),
-								shippingAddress.getCity(),
-								shippingAddress.getAddress() }) == 1 ? true
-				: false;
+		return jdbcTemplateObject.update(SQL, new Object[] { shippingAddress.getUserId(), shippingAddress.getCity(),
+				shippingAddress.getAddress() }) == 1 ? true : false;
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.pk.ecommerce.dao.CustomerDao#updateShippingAddress(org.pk.ecommerce
+	 * @see org.pk.ecommerce.dao.CustomerDao#updateShippingAddress(org.pk.ecommerce
 	 * .entities.user.ShippingAddress)
 	 */
 	@Override
 	public boolean updateShippingAddress(ShippingAddress shippingAddress) {
 		String SQL = "{CALL updateShippingAddress(?, ?, ?, ?)}";
-		return jdbcTemplateObject.update(
-				SQL,
-				new Object[] { shippingAddress.getCity(),
-						shippingAddress.getAddress(),
-						shippingAddress.getUserId(),
-						shippingAddress.getShippingAddressId() }) == 1 ? true
-				: false;
-
+		return jdbcTemplateObject
+				.update(SQL,
+						new Object[] { shippingAddress.getCity(), shippingAddress.getAddress(),
+								shippingAddress.getUserId(), shippingAddress.getShippingAddressId() }) == 1 ? true
+										: false;
 	}
 
 	/*
@@ -416,8 +414,7 @@ public class CustomerDaoImpl implements CustomerDao {
 		String SQL = "{CALL getCarts(?)}";
 		List<Cart> list = jdbcTemplateObject.query(SQL, new RowMapper<Cart>() {
 			@Override
-			public Cart mapRow(java.sql.ResultSet rs, int rowMap)
-					throws SQLException {
+			public Cart mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
 				Cart object = new Cart();
 
 				return object;
@@ -431,8 +428,7 @@ public class CustomerDaoImpl implements CustomerDao {
 		String SQL = "{CALL getProductsFromCart(?)}";
 		List<Cart> list = jdbcTemplateObject.query(SQL, new RowMapper<Cart>() {
 			@Override
-			public Cart mapRow(java.sql.ResultSet rs, int rowMap)
-					throws SQLException {
+			public Cart mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
 				Cart cart = new Cart();
 				cart.setCartId(rs.getInt("cartId"));
 				cart.setProducts(getCartProducts(userId));
@@ -447,34 +443,36 @@ public class CustomerDaoImpl implements CustomerDao {
 
 	private List<Product> getCartProducts(final int userId) {
 		String SQL = "{CALL getProductsFromCart(?)}";
-		List<Product> list = jdbcTemplateObject.query(SQL,
-				new RowMapper<Product>() {
-					@Override
-					public Product mapRow(java.sql.ResultSet rs, int rowMap)
-							throws SQLException {
-						Product object = new Product();
-						object.setProductId(rs.getInt("productId"));
-						object.setProductName(rs.getString("productName"));
-						object.setPrice(rs.getDouble("price"));
-						object.setImageNamePath(rs.getString("imageNamePath"));
-						object.setQuantity(rs.getInt("cartQuantity"));
-						object.setDiscount(rs.getDouble("discount"));
-						object.setDescription(rs.getString("description"));
+		List<Product> list = jdbcTemplateObject.query(SQL, new RowMapper<Product>() {
+			@Override
+			public Product mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
+				Product object = new Product();
+				object.setProductId(rs.getInt("productId"));
+				object.setProductName(rs.getString("productName"));
+				object.setPrice(rs.getDouble("price"));
+				object.setImageNamePath(rs.getString("imageNamePath"));
+				object.setQuantity(rs.getInt("cartQuantity"));
+				object.setDiscount(rs.getDouble("discount"));
+				object.setDescription(rs.getString("description"));
 
-						object.setSubCategory(getSubCategory(rs
-								.getInt("subCategoryId")));
+				object.setSubCategory(getSubCategory(rs.getInt("subCategoryId")));
 
-						SubCategory subCategory = new SubCategory();
-						subCategory.setSubCategoryId(rs.getInt("subCategoryId"));
-						subCategory.setSubCategoryName(rs
-								.getString("subCategoryName"));
-						subCategory.setDescription(rs.getString("description"));
+				SubCategory subCategory = new SubCategory();
+				subCategory.setSubCategoryId(rs.getInt("subCategoryId"));
+				subCategory.setSubCategoryName(rs.getString("subCategoryName"));
+				subCategory.setDescription(rs.getString("description"));
 
-						return object;
-					}
-				}, userId);
+				return object;
+			}
+		}, userId);
 
 		return (list != null && !list.isEmpty()) ? list : null;
 
+	}
+
+	@Override
+	public void emptyCart(int userId) {
+		String SQL = "delete from shoppingcart where userId=?";
+		jdbcTemplateObject.update(SQL, new Object[] { userId });
 	}
 }

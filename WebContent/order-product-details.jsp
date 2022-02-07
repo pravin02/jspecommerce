@@ -1,4 +1,8 @@
 
+<%@page import="java.util.stream.Stream"%>
+<%@page import="java.util.stream.Collectors"%>
+<%@page import="org.pk.ecommerce.entities.order.PurchaseDetail"%>
+<%@page import="org.pk.ecommerce.entities.order.PurchaseMaster"%>
 <%@page import="org.pk.ecommerce.entities.product.Product"%>
 <%@page import="org.pk.ecommerce.entities.product.SubCategory"%>
 <%@page import="org.pk.ecommerce.dao.CustomerDao"%>
@@ -19,17 +23,9 @@
 	private CustomerDao customerDao;%>
 <%
 User user = (User) session.getAttribute(GlobalConstants.USER_DETAILS);
-
 List<Category> categories = customerDao.getAllCategories();
-
-List<Product> products = null;
-int subCategoryId = 1;
-try {
-	if (request.getParameter("subCategoryId") != null)
-		subCategoryId = Integer.parseInt(request.getParameter("subCategoryId"));
-} finally {
-	products = customerDao.getAllProductList(subCategoryId, "", 0);
-}
+PurchaseMaster purchaseMaster = this.customerDao.getPurchaseMasterByUserId(user.getUserId(),
+		Integer.parseInt(request.getParameter("orderId")));
 %>
 
 <!DOCTYPE html>
@@ -39,7 +35,7 @@ try {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-<title>Home | Online Agree Pet Zone</title>
+<title>Orders | Online Agree Pet Zone</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <link href="css/prettyPhoto.css" rel="stylesheet">
@@ -153,37 +149,57 @@ try {
 				</div>
 				<div class="col-sm-9 padding-right">
 					<div class="features_items">
-						<h2 class="title text-center">Pets</h2>
-						<%
-						if (products != null && !products.isEmpty()) {
-							for (Product product : products) {
-						%>
-						<div class="col-sm-4">
-							<div class="product-image-wrapper">
-								<div class="single-products" style="border: solid 1px">
-									<div class="productinfo text-center" style="margin: 5px">
-										<%
-										System.out.println(request.getContextPath() + "/" + product.getImageNamePath());
-										%>
-										<img
-											src="<%=request.getContextPath() + "/" + product.getImageNamePath()%>"
-											alt="<%=product.getProductName()%>" />
-										<p><%=product.getProductName()%></p>
-										<p><%=product.getDescription()%></p>
-										<h2><%=product.getPrice()%></h2>
-										<a
-											href="product-details.jsp?productId=<%=product.getProductId()%>"
-											class="btn btn-default add-to-cart"> <i
-											class="fa fa-shopping-cart"></i>Add to cart
-										</a>
-									</div>
-								</div>
+						<h2 class="title text-center">Order Details List</h2>
+						<div class="row">
+							<div class="col-md-12">
+								<label>Order ID - <%=purchaseMaster.getPurchaseMasterId()%></label>
+								<br /> <label>Address - <%=purchaseMaster.getShippingAddress()%></label>
+								<br /> <label>Contact - <%=purchaseMaster.getContact()%></label>
+								<br /> <label>DateTime - <%=purchaseMaster.getPurchaseDateTime()%></label><br />
+								<label>Grand Total -<%=purchaseMaster.getPurchaseDetails().stream().map(pd1 -> pd1.getQuantity() * pd1.getPrice())
+		.collect(Collectors.toList()).stream().reduce(0.0, Double::sum)%>
+								</label> <br /> <label>Status - <%=purchaseMaster.getStatus()%></label>
+								<br />
 							</div>
 						</div>
-						<%
-						}
-						}
-						%>
+						<div class="row">
+							<div class="col-md-12">
+								<table
+									class="table table-responsive table-stripped table-bordered">
+									<thead>
+										<tr>
+											<th>Product Id</th>
+											<th>Image</th>
+											<th>Name</th>
+											<th>Quantity</th>
+											<th>Price</th>
+											<th>Total</th>
+										</tr>
+									</thead>
+									<tbody>
+										<%
+										if (purchaseMaster != null && purchaseMaster.getPurchaseDetails() != null) {
+											for (PurchaseDetail pd : purchaseMaster.getPurchaseDetails()) {
+										%>
+										<tr>
+											<td><%=pd.getPurchaseDetailId()%></td>
+											<td><img
+												src="<%=request.getContextPath() + "/" + pd.getProduct().getImageNamePath()%>"
+												alt="<%=pd.getProduct().getProductName()%>"
+												style="max-height: 200px; max-width: 200px" /></td>
+											<td><%=pd.getProduct().getProductName()%></td>
+											<td><%=pd.getQuantity()%></td>
+											<td><%=pd.getPrice()%></td>
+											<td><%=pd.getQuantity() * pd.getPrice()%></td>
+										</tr>
+										<%
+										}
+										}
+										%>
+									</tbody>
+								</table>
+							</div>
+						</div>
 					</div>
 					<!--features_items-->
 				</div>

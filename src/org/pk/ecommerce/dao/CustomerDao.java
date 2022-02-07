@@ -50,8 +50,7 @@ public interface CustomerDao {
 	 * @param priceRange
 	 * @return
 	 */
-	List<Product> getAllProductList(int subCategoryId, String productName,
-			double priceRange);
+	List<Product> getAllProductList(int subCategoryId, String productName, double priceRange);
 
 	/**
 	 * @param productId
@@ -76,6 +75,10 @@ public interface CustomerDao {
 	 * @return
 	 */
 	List<PurchaseMaster> getPurchaseMaster(int userId);
+	
+	PurchaseMaster getPurchaseMasterByUserId(int userId, int orderId);
+	
+	PurchaseMaster getLatestPurchaseMaster(int userId);
 
 	/**
 	 * @param purchaseMasterId
@@ -85,10 +88,11 @@ public interface CustomerDao {
 
 	/**
 	 * @param cart
-	 * @return if cart added successfully it will return true otherwise will
-	 *         return false
+	 * @return if cart added successfully it will return true otherwise will return
+	 *         false
 	 */
 	boolean addToCart(Cart cart);
+
 	/**
 	 * @param cart
 	 * @return if cart removed successfully it will return true otherwise will
@@ -119,5 +123,7 @@ public interface CustomerDao {
 	 * @return
 	 */
 	Cart getProductsFromCart(int userId);
+	
+	void emptyCart(int userId);
 
 }

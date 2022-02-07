@@ -1,6 +1,5 @@
 package org.pk.ecommerce.entities.order;
 
-
 import org.pk.ecommerce.entities.product.Product;
 
 public class PurchaseDetail {
@@ -9,10 +8,20 @@ public class PurchaseDetail {
 	private int purchaseDetailId;
 	private int productId;
 	private int quantity;
-	private float price;
-	private float totalAmount;
+	private double price;
 
 	private Product product;
+
+	public PurchaseDetail() {
+
+	}
+
+	public PurchaseDetail(int masterId, Product product) {
+		this.purchaseMasterId = masterId;
+		this.productId = product.getProductId();
+		this.quantity = product.getQuantity();
+		this.price = product.getPrice();
+	}
 
 	/**
 	 * @return the purchaseMasterId
@@ -22,8 +31,7 @@ public class PurchaseDetail {
 	}
 
 	/**
-	 * @param purchaseMasterId
-	 *            the purchaseMasterId to set
+	 * @param purchaseMasterId the purchaseMasterId to set
 	 */
 	public void setPurchaseMasterId(int purchaseMasterId) {
 		this.purchaseMasterId = purchaseMasterId;
@@ -37,8 +45,7 @@ public class PurchaseDetail {
 	}
 
 	/**
-	 * @param purchaseDetailId
-	 *            the purchaseDetailId to set
+	 * @param purchaseDetailId the purchaseDetailId to set
 	 */
 	public void setPurchaseDetailId(int purchaseDetailId) {
 		this.purchaseDetailId = purchaseDetailId;
@@ -52,8 +59,7 @@ public class PurchaseDetail {
 	}
 
 	/**
-	 * @param productId
-	 *            the productId to set
+	 * @param productId the productId to set
 	 */
 	public void setProductId(int productId) {
 		this.productId = productId;
@@ -67,8 +73,7 @@ public class PurchaseDetail {
 	}
 
 	/**
-	 * @param quantity
-	 *            the quantity to set
+	 * @param quantity the quantity to set
 	 */
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
@@ -77,31 +82,15 @@ public class PurchaseDetail {
 	/**
 	 * @return the price
 	 */
-	public float getPrice() {
+	public double getPrice() {
 		return price;
 	}
 
 	/**
-	 * @param price
-	 *            the price to set
+	 * @param price the price to set
 	 */
-	public void setPrice(float price) {
+	public void setPrice(double price) {
 		this.price = price;
-	}
-
-	/**
-	 * @return the totalAmount
-	 */
-	public float getTotalAmount() {
-		return totalAmount;
-	}
-
-	/**
-	 * @param totalAmount
-	 *            the totalAmount to set
-	 */
-	public void setTotalAmount(float totalAmount) {
-		this.totalAmount = totalAmount;
 	}
 
 	/**
@@ -112,8 +101,7 @@ public class PurchaseDetail {
 	}
 
 	/**
-	 * @param product
-	 *            the product to set
+	 * @param product the product to set
 	 */
 	public void setProduct(Product product) {
 		this.product = product;
@@ -126,10 +114,9 @@ public class PurchaseDetail {
 	 */
 	@Override
 	public String toString() {
-		return "PurchaseDetail [purchaseMasterId=" + purchaseMasterId
-				+ ", purchaseDetailId=" + purchaseDetailId + ", productId="
-				+ productId + ", quantity=" + quantity + ", price=" + price
-				+ ", totalAmount=" + totalAmount + ", product=" + product + "]";
+		return "PurchaseDetail [purchaseMasterId=" + purchaseMasterId + ", purchaseDetailId=" + purchaseDetailId
+				+ ", productId=" + productId + ", quantity=" + quantity + ", price=" + price + ", product=" + product
+				+ "]";
 	}
 
 }

@@ -67,6 +67,7 @@ String message = request.getParameter("message");
 								<%
 								} else {
 								%>
+								<li><a href="orders.jsp"><i class="fa fa-shop"></i>Orders</a></li>
 								<li><a href="login.jsp"><i class="fa fa-lock"></i> Log
 										out</a></li>
 								<%

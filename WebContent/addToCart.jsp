@@ -45,7 +45,7 @@ private CustomerDao customerDao;
 		else
 		{
 			RequestDispatcher rd = request.getRequestDispatcher("product-details.jsp?productId="+productId);
-			request.setAttribute("message", "Error while adding product to cart.");
+			request.setAttribute("message", "This product already exists in cart");
 			rd.forward(request, response);
 		}	
 	}

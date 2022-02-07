@@ -81,6 +81,7 @@ double subTotal = 0, total = 0;
 								<%
 								} else {
 								%>
+								<li><a href="orders.jsp"><i class="fa fa-shop"></i>Orders</a></li>
 								<li><a href="submitFeedback.jsp"><i class="fa fa-lock"></i>Feedback</a></li>
 								<li><a href="login.jsp" name="logout"><i
 										class="fa fa-lock"></i> Log out</a></li>
