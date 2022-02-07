@@ -62,7 +62,7 @@ double subTotal = 0, total = 0;
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-4">
-						<%@include file="icon.jsp" %>
+						<%@include file="icon.jsp"%>
 					</div>
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
@@ -99,8 +99,9 @@ double subTotal = 0, total = 0;
 	<!--/header-->
 	<form action="checkout.jsp" method="post">
 		<section id="cart_items">
-			<div class="container">			
-				<div class="row alert alert-info" style="display: <%=request.getAttribute("message") == null ? "none" : "block" %> ">
+			<div class="container">
+				<div class="row alert alert-info"
+					style="display: <%=request.getAttribute("message") == null ? "none" : "block" %> ">
 					<div class="col-md-12 col-md-offset-4 ">
 						<%=request.getAttribute("message") == null ? "" : request.getAttribute("message")%>
 					</div>
@@ -136,7 +137,7 @@ double subTotal = 0, total = 0;
 								<td class="cart_product"><a href=""> <img
 										src="<%=request.getContextPath() + "/" + p.getImageNamePath()%>"
 										alt="<%=p.getProductName()%>"
-										style="max-height:200px; max-width:200px" />
+										style="max-height: 200px; max-width: 200px" />
 								</a></td>
 								<td class="cart_description">
 									<h4>

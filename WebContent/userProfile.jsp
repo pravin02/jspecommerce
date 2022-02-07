@@ -55,7 +55,7 @@ String message = request.getParameter("message");
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-4">
-						<%@include file="icon.jsp" %>
+						<%@include file="icon.jsp"%>
 					</div>
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
@@ -90,7 +90,7 @@ String message = request.getParameter("message");
 
 	<section>
 		<div class="container">
-		<div class="row">
+			<div class="row">
 				<div class="col-md-4 col-md-offset-4">
 					<%
 					if (message != null) {
@@ -101,22 +101,22 @@ String message = request.getParameter("message");
 					%>
 				</div>
 			</div>
-			<div class="row" >
+			<div class="row">
 				<div class="signup-form col-md-4 col-md-offset-4">
 					<!--sign up form-->
 					<h2 style="text-align: center;">Update Profile</h2>
 					<form action="common?action=updateUser" method="post">
 						<input type="text" name="userId" placeholder="UserId"
-							value="<%=user.getUserId()%>" style="display:none" /> <input type="text"
-							name="fullName" placeholder="Full Name"
+							value="<%=user.getUserId()%>" style="display: none" /> <input
+							type="text" name="fullName" placeholder="Full Name"
 							value="<%=user.getFullName()%>" disabled="disabled" /> <input
 							type="email" id="emailId" name="emailId"
-							placeholder="Email Address" value="<%=user.getEmailId()%>" />
-						<input type="text" name="mobileNumber"
-							value="<%=user.getMobileNo()%>" placeholder="Contact" /> <input
-							type="text" name="gender" value="<%=user.getGender()%>"
-							placeholder="Gender" disabled="disabled" /> <input type="text"
-							name="dob" value="<%=user.getDob()%>" placeholder="Date Of Birth"
+							placeholder="Email Address" value="<%=user.getEmailId()%>" /> <input
+							type="text" name="mobileNumber" value="<%=user.getMobileNo()%>"
+							placeholder="Contact" /> <input type="text" name="gender"
+							value="<%=user.getGender()%>" placeholder="Gender"
+							disabled="disabled" /> <input type="text" name="dob"
+							value="<%=user.getDob()%>" placeholder="Date Of Birth"
 							disabled="disabled" /> <input type="text" name="oldPassword"
 							placeholder="Old Password" /> <input type="text"
 							name="newPassword" placeholder="New Password" /> <input

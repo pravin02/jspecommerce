@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import org.pk.ecommerce.GlobalConstants;
 import org.pk.ecommerce.dao.CommonDao;
 import org.pk.ecommerce.entities.user.User;
-
+import org.pk.ecommerce.entities.user.UserType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
@@ -80,10 +80,10 @@ public class CommonServlet extends HttpServlet {
 		// submit feedback
 		else if ("submitFeedback".equalsIgnoreCase(action)) {
 			HttpSession session = request.getSession();
-			User user = (User)session.getAttribute(GlobalConstants.USER_DETAILS);
+			User user = (User) session.getAttribute(GlobalConstants.USER_DETAILS);
 			String feedback = request.getParameter("feedback");
-			if(this.commonDao.submitFeedback(user.getUserId(), feedback)) {
-				response.sendRedirect("submitFeedback.jsp?message=Feedback submitted successfully.");	
+			if (this.commonDao.submitFeedback(user.getUserId(), feedback)) {
+				response.sendRedirect("submitFeedback.jsp?message=Feedback submitted successfully.");
 			} else {
 				response.sendRedirect("submitFeedback.jsp?message=Feedback not submitted.");
 			}
@@ -102,6 +102,9 @@ public class CommonServlet extends HttpServlet {
 			System.out.println(" login : user=>" + user.getType().name());
 			HttpSession session = request.getSession();
 			session.setAttribute(GlobalConstants.USER_DETAILS, user);
+			if (UserType.Admin.name().equals(user.getType().name())) {
+				response.sendRedirect("admin/index.jsp");
+			}
 			response.sendRedirect("index.jsp");
 		} else {
 			String action = request.getParameter("action");

@@ -1,5 +1,4 @@
 
-<%@page import="org.pk.ecommerce.entities.order.PurchaseMaster"%>
 <%@page import="org.pk.ecommerce.entities.product.Product"%>
 <%@page import="org.pk.ecommerce.entities.product.SubCategory"%>
 <%@page import="org.pk.ecommerce.dao.CustomerDao"%>
@@ -20,8 +19,17 @@
 	private CustomerDao customerDao;%>
 <%
 User user = (User) session.getAttribute(GlobalConstants.USER_DETAILS);
+
 List<Category> categories = customerDao.getAllCategories();
-List<PurchaseMaster> purchaseMasterList = this.customerDao.getPurchaseMaster(user.getUserId());
+
+List<Product> products = null;
+int subCategoryId = 1;
+try {
+	if (request.getParameter("subCategoryId") != null)
+		subCategoryId = Integer.parseInt(request.getParameter("subCategoryId"));
+} finally {
+	products = customerDao.getAllProductList(subCategoryId, "", 0);
+}
 %>
 
 <!DOCTYPE html>
@@ -31,7 +39,7 @@ List<PurchaseMaster> purchaseMasterList = this.customerDao.getPurchaseMaster(use
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-<title>Orders | Online Agree Pet Zone</title>
+<title>Home | Online Agree Pet Zone</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <link href="css/prettyPhoto.css" rel="stylesheet">
@@ -62,7 +70,7 @@ List<PurchaseMaster> purchaseMasterList = this.customerDao.getPurchaseMaster(use
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-4">
-						<%@include file="icon.jsp"%>
+						<%@include file="../icon.jsp"%>
 					</div>
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
@@ -79,6 +87,7 @@ List<PurchaseMaster> purchaseMasterList = this.customerDao.getPurchaseMaster(use
 								<%
 								} else {
 								%>
+								<li><a href="orders.jsp"><i class="fa fa-shop"></i>Orders</a></li>
 								<li><a href="submitFeedback.jsp"><i class="fa fa-lock"></i>Feedback</a></li>
 								<li><a href="login.jsp"><i class="fa fa-lock"></i>Logout</a></li>
 								<%
@@ -144,51 +153,44 @@ List<PurchaseMaster> purchaseMasterList = this.customerDao.getPurchaseMaster(use
 				</div>
 				<div class="col-sm-9 padding-right">
 					<div class="features_items">
-						<h2 class="title text-center">Orders List</h2>
-						<div class="row">
-							<div class="col-md-12">
-								<table
-									class="table table-responsive table-stripped table-bordered">
-									<thead>
-										<tr>
-											<th>Order Id</th>
-											<th>Address</th>
-											<th>Contact No</th>
-											<th>No Of Items</th>
-											<th>Assigned Driver</th>
-											<th>Status</th>
-										</tr>
-									</thead>
-									<tbody>
+						<h2 class="title text-center">Pets</h2>
+						<%
+						if (products != null && !products.isEmpty()) {
+							for (Product product : products) {
+						%>
+						<div class="col-sm-4">
+							<div class="product-image-wrapper">
+								<div class="single-products" style="border: solid 1px">
+									<div class="productinfo text-center" style="margin: 5px">
 										<%
-										if (purchaseMasterList != null && !purchaseMasterList.isEmpty()) {
-											for (PurchaseMaster pm : purchaseMasterList) {
+										System.out.println(request.getContextPath() + "/" + product.getImageNamePath());
 										%>
-										<tr>
-											<td><a
-												href="order-product-details.jsp?orderId=<%=pm.getPurchaseMasterId()%>"><%=pm.getPurchaseMasterId()%></a>
-											</td>
-											<td><%=pm.getShippingAddress()%></td>
-											<td><%=pm.getContact()%></td>
-											<td><%=pm.getPurchaseDetails().size()%></td>
-											<td><%=pm.getDriverId()%></td>
-											<td><%=pm.getStatus()%></td>
-										</tr>
-										<%
-										}
-										}
-										%>
-									</tbody>
-								</table>
+										<img
+											src="<%=request.getContextPath() + "/" + product.getImageNamePath()%>"
+											alt="<%=product.getProductName()%>" />
+										<p><%=product.getProductName()%></p>
+										<p><%=product.getDescription()%></p>
+										<h2><%=product.getPrice()%></h2>
+										<a
+											href="product-details.jsp?productId=<%=product.getProductId()%>"
+											class="btn btn-default add-to-cart"> <i
+											class="fa fa-shopping-cart"></i>Add to cart
+										</a>
+									</div>
+								</div>
 							</div>
 						</div>
+						<%
+						}
+						}
+						%>
 					</div>
 					<!--features_items-->
 				</div>
 			</div>
 		</div>
 	</section>
-	<%@include file="footer.jsp"%>
+	<%@include file="../footer.jsp"%>
 	<!--/Footer-->
 	<script src="js/jquery.js"></script>
 	<script src="js/bootstrap.min.js"></script>

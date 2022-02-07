@@ -82,7 +82,7 @@ private CustomerDao customerDao;
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-4">
-						<%@include file="icon.jsp" %>
+						<%@include file="icon.jsp"%>
 
 					</div>
 					<div class="col-sm-8">
@@ -91,7 +91,7 @@ private CustomerDao customerDao;
 								<li><a href="index.jsp"><i class="fa fa-user"></i>
 										Welcome, <%=user.getFullName()%></a></li>
 								<li><a href="userProfile.jsp"><i class="fa fa-user"></i>
-										Account</a></li>								
+										Account</a></li>
 								<li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i>
 										Cart</a></li>
 								<%
@@ -106,7 +106,7 @@ private CustomerDao customerDao;
 								<li><a href="submitFeedback.jsp"><i class="fa fa-lock"></i>Feedback</a></li>
 								<li><a href="login.jsp"><i class="fa fa-lock"></i> Log
 										out</a></li>
-										
+
 								<%
 									}
 								%>
@@ -143,12 +143,9 @@ private CustomerDao customerDao;
 										<li>
 											<%
 												if (user == null) {
-											%> <a href="login.jsp"> Login</a> 
-											<%
+											%> <a href="login.jsp"> Login</a> <%
  												} else {
- 											%> 
- 											<a href="login.jsp"> Log out</a> 
- 											<%
+ 											%> <a href="login.jsp"> Log out</a> <%
  												}
  											%>
 										</li>
@@ -191,11 +188,10 @@ private CustomerDao customerDao;
 										<ul>
 											<% if(category.getSubCategories() != null && !category.getSubCategories().isEmpty()){
 											for(SubCategory subCategory: category.getSubCategories()){ %>
-											<li>
-												<a href="index.jsp?subCategoryId=<%=subCategory.getSubCategoryId() %>">
+											<li><a
+												href="index.jsp?subCategoryId=<%=subCategory.getSubCategoryId() %>">
 													<%=subCategory.getSubCategoryName() %>
-												</a>
-											</li>
+											</a></li>
 											<%}} %>
 										</ul>
 									</div>
@@ -211,7 +207,8 @@ private CustomerDao customerDao;
 						<!--/product-information-->
 						<img
 							src="<%=request.getContextPath()+"/"+product.getImageNamePath() %>"
-							alt="<%=product.getProductName() %>" style="max-height:200px; max-width:200px"/>
+							alt="<%=product.getProductName() %>"
+							style="max-height: 200px; max-width: 200px" />
 						<h2><%=product.getProductName() %></h2>
 					</div>
 					<!--/product-information-->
@@ -219,11 +216,10 @@ private CustomerDao customerDao;
 				<div class="col-sm-5">
 					<div class="product-information">
 						<form action="addToCart.jsp" method="get">
-							<span> 
-								<span><%=product.getPrice() %></span>
-								 <label>Quantity:</label>
-								<input type="text" name="quantity" value="1"> 
-								<input type="hidden" name="productId" value="<%=product.getProductId() %>">
+							<span> <span><%=product.getPrice() %></span> <label>Quantity:</label>
+								<input type="text" name="quantity" value="1"> <input
+								type="hidden" name="productId"
+								value="<%=product.getProductId() %>">
 								<button type="submit" class="btn btn-fefault cart">
 									<i class="fa fa-shopping-cart"></i> Add to cart
 								</button>
@@ -237,7 +233,7 @@ private CustomerDao customerDao;
 		</div>
 	</section>
 
-	<%@ include file="footer.jsp" %>
+	<%@ include file="footer.jsp"%>
 	<!--/Footer-->
 
 	<script src="js/jquery.js"></script>

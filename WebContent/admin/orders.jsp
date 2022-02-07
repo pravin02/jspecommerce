@@ -62,7 +62,7 @@ List<PurchaseMaster> purchaseMasterList = this.customerDao.getPurchaseMaster(use
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-4">
-						<%@include file="icon.jsp"%>
+						<%@include file="../icon.jsp"%>
 					</div>
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
@@ -188,7 +188,7 @@ List<PurchaseMaster> purchaseMasterList = this.customerDao.getPurchaseMaster(use
 			</div>
 		</div>
 	</section>
-	<%@include file="footer.jsp"%>
+	<%@include file="../footer.jsp"%>
 	<!--/Footer-->
 	<script src="js/jquery.js"></script>
 	<script src="js/bootstrap.min.js"></script>

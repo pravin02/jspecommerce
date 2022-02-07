@@ -43,8 +43,7 @@
 		<div class="header_top">
 			<!--header_top-->
 			<div class="container">
-				<div class="row">
-				</div>
+				<div class="row"></div>
 			</div>
 		</div>
 		<!--/header_top-->
@@ -61,10 +60,10 @@
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
-								
+
 								<li><a href="contact-us.jsp"><i class="fa fa-contact"></i>
-										Contact Us</a></li>								
-								
+										Contact Us</a></li>
+
 								<li><a href="login.jsp"><i class="fa fa-lock"></i>
 										Login</a></li>
 							</ul>
@@ -179,12 +178,12 @@
 						<!--sign up form-->
 						<h2>New User Signup!</h2>
 						<form action="common?action=registerUser" method="post">
-							<input type="text" name="fullName" placeholder="Full Name" /> 
-							<input type="email" name="emailId" placeholder="Email Address" /> 
-							<input type="password" name="password" placeholder="Password" /> 
-							<input type="text" name="mobileNumber" placeholder="Contact" /> 
-							<input type="text" name="dob" placeholder="Date Of Birth" /> 
-							<select name="gender">
+							<input type="text" name="fullName" placeholder="Full Name" /> <input
+								type="email" name="emailId" placeholder="Email Address" /> <input
+								type="password" name="password" placeholder="Password" /> <input
+								type="text" name="mobileNumber" placeholder="Contact" /> <input
+								type="text" name="dob" placeholder="Date Of Birth" /> <select
+								name="gender">
 								<option value="MALE">MALE</option>
 								<option value="FEMALE">FEMALE</option>
 							</select> <br> <br>
@@ -204,8 +203,8 @@
 					<p class="pull-left">Copyright © 2015-16 E-SHOPPER Inc. All
 						rights reserved.</p>
 					<p class="pull-right">
-						Designed &amp; Developed by <span><a target="_blank" href="#">B.E.
-								Students</a></span>
+						Designed &amp; Developed by <span><a target="_blank"
+							href="#">B.E. Students</a></span>
 					</p>
 				</div>
 			</div>

@@ -3,7 +3,8 @@
 <%@page import="org.pk.ecommerce.entities.product.SubCategory"%>
 <%@page import="org.pk.ecommerce.dao.CustomerDao"%>
 <%@page import="org.springframework.beans.factory.annotation.Autowired"%>
-<%@page	import="org.springframework.web.context.support.SpringBeanAutowiringSupport"%>
+<%@page
+	import="org.springframework.web.context.support.SpringBeanAutowiringSupport"%>
 <%@page import="org.pk.ecommerce.entities.product.Category"%>
 <%@page import="java.util.List"%>
 <%@page import="org.pk.ecommerce.GlobalConstants"%>

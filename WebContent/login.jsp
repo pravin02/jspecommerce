@@ -46,7 +46,7 @@ String failedMesage = request.getParameter("failed");
 			<div class="container">
 				<div class="row">
 					<div class="col-sm-4">
-						<%@include file="icon.jsp" %>
+						<%@include file="icon.jsp"%>
 					</div>
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
@@ -73,13 +73,13 @@ String failedMesage = request.getParameter("failed");
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-12 col-md-offset-4">
-				<%
+					<%
 					if (failedMesage != null) {
 					%>
 					<span style="color: #FF0000; font-size: 20px"><%=failedMesage %></span>
 					<%
 					}
-					%>					
+					%>
 					<%
 					if (register != null && register.equals("SUCCESS")) {
 					%>
@@ -104,7 +104,7 @@ String failedMesage = request.getParameter("failed");
 					<%
 					}
 					%>
-					
+
 				</div>
 			</div>
 			<div class="row">
