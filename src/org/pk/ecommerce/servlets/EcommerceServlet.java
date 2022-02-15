@@ -46,6 +46,7 @@ public class EcommerceServlet extends HttpServlet {
 		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
 	}
 
+	
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
@@ -54,9 +55,18 @@ public class EcommerceServlet extends HttpServlet {
 		} else if ("assignDriver".equalsIgnoreCase(action)) {
 			System.out.println("in action");
 			this.assignDriver(request, response);
+		} else if ("updateOrderStatus".equals(action)) {
+			this.updateOrderStatus(request, response);
 		}
 	}
 
+	/**
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	public void assignDriver(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		int driverId = Integer.parseInt(request.getParameter("driverId"));
@@ -67,9 +77,15 @@ public class EcommerceServlet extends HttpServlet {
 		response.sendRedirect("admin-order-product-details.jsp?orderId=" + orderId);
 	}
 
+	/**
+	 * 
+	 * @param request
+	 * @param response
+	 * @throws ServletException
+	 * @throws IOException
+	 */
 	public void purchaseProduct(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		try {
 			String contact = request.getParameter("contact");
 			String address = request.getParameter("address");
@@ -120,4 +136,11 @@ public class EcommerceServlet extends HttpServlet {
 		}
 	}
 
+	public void updateOrderStatus(HttpServletRequest request, HttpServletResponse response) throws IOException{
+		int orderId = Integer.parseInt(request.getParameter("orderId"));
+		String status = request.getParameter("orderStatus");
+		this.customerDao.updateOrderStatus(orderId, status);
+		request.setAttribute("message", "Order status updated successfully.");
+		response.sendRedirect("driver-order-product-details.jsp?orderId=" + orderId);	
+	}
 }

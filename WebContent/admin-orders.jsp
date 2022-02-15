@@ -1,4 +1,3 @@
-
 <%@page import="org.pk.ecommerce.entities.order.PurchaseMaster"%>
 <%@page import="org.pk.ecommerce.entities.product.Product"%>
 <%@page import="org.pk.ecommerce.entities.product.SubCategory"%>
@@ -31,7 +30,7 @@ List<PurchaseMaster> purchaseMasterList = this.customerDao.getPurchaseMasterForA
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-<title>Home | Online Agree Pet Zone</title>
+<title>Admin Orders | Online Agree Pet Zone</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <link href="css/prettyPhoto.css" rel="stylesheet">
@@ -67,21 +66,12 @@ List<PurchaseMaster> purchaseMasterList = this.customerDao.getPurchaseMasterForA
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
-
+								<li>
+								<a href="javascript:void(0)">Welcome, <%=user.getFullName() %> (<%=user.getType().name() %>)</a></li>
 								<li><a href="userProfile.jsp"><i class="fa fa-user"></i>
 										Account</a></li>								
-								<%
-								if (user == null) {
-								%>
-								<li><a href="adminLogin.jsp"><i class="fa fa-lock"></i>Login</a></li>
-								<%
-								} else {
-								%>								
 								<li><a href="viewFeedback.jsp"><i class="fa fa-eye"></i>Feedback</a></li>
-								<li><a href="login.jsp"><i class="fa fa-lock"></i>Logout</a></li>
-								<%
-								}
-								%>
+								<li><a href="adminLogin.jsp"><i class="fa fa-lock"></i><%=user== null ? "Login" : "Log Out" %></a></li>
 							</ul>
 						</div>
 					</div>
@@ -94,53 +84,8 @@ List<PurchaseMaster> purchaseMasterList = this.customerDao.getPurchaseMasterForA
 
 	<section>
 		<div class="container">
-			<div class="row" style="padding-top: 20px">
-				<div class="col-sm-3">
-					<div class="left-sidebar">
-						<h2>Category</h2>
-						<div class="panel-group category-products" id="accordian">
-							<!--category-productsr-->
-							<%
-							if (categories != null && !categories.isEmpty()) {
-								for (Category category : categories) {
-							%>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title">
-										<a data-toggle="collapse" data-parent="#accordian"
-											href="#subCate<%=category.getCategoryId()%>"> <span
-											class="badge pull-right"><i class="fa fa-plus"></i></span> <%=category.getCategoryName()%>
-										</a>
-									</h4>
-								</div>
-								<div id="subCate<%=category.getCategoryId()%>"
-									class="panel-collapse collapse">
-									<div class="panel-body">
-										<ul>
-											<%
-											if (category.getSubCategories() != null && !category.getSubCategories().isEmpty()) {
-												for (SubCategory subCategory : category.getSubCategories()) {
-											%>
-											<a
-												href="index.jsp?subCategoryId=<%=subCategory.getSubCategoryId()%>">
-												<li><%=subCategory.getSubCategoryName()%></li>
-											</a>
-											<%
-											}
-											}
-											%>
-										</ul>
-									</div>
-								</div>
-							</div>
-							<%
-							}
-							}
-							%>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-9 padding-right">
+			<div class="row" style="padding-top: 20px">				
+				<div class="col-sm-12">
 					<div class="features_items">
 						<h2 class="title text-center">Orders List</h2>
 						<div class="row">

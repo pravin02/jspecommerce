@@ -78,6 +78,8 @@ public interface CustomerDao {
 	List<PurchaseMaster> getPurchaseMaster(int userId);
 
 	List<PurchaseMaster> getPurchaseMasterForAdmin();
+	
+	List<PurchaseMaster> getPurchaseMasterForDriver(int userId);
 
 	PurchaseMaster getPurchaseMasterByUserId(int orderId);
 
@@ -132,5 +134,7 @@ public interface CustomerDao {
 	boolean assignDriverToOrder(int orderId, int driverId);
 	
 	List<Feedback> viewAllFeedbacks();
+	
+	boolean updateOrderStatus(int orderId, String status);
 
 }

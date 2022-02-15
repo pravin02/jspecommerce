@@ -215,6 +215,8 @@ CREATE TABLE `user` (
   `mobileNumber` varchar(15) NOT NULL,
   `gender` varchar(10) NOT NULL,
   `dob` varchar(10) default NULL,
+  `vehicleName` varchar(45) NOT NULL default '',
+  `vehicleNumber` varchar(45) NOT NULL default '',
   `type` enum('Farmer','Admin','Driver') NOT NULL default 'Farmer',
   PRIMARY KEY  (`userId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -224,11 +226,15 @@ CREATE TABLE `user` (
 --
 
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` (`userId`,`emailId`,`password`,`fullName`,`mobileNumber`,`gender`,`dob`,`type`) VALUES 
- (1,'ppp@gmail.com','ppp','Pravin P Patil','1234567890','MALE','01-01-2022','Admin'),
- (2,'test@gmail.com','new','Tester','1234567890','MALE','01-11-1212','Farmer'),
- (3,'driver@gmail.com','driver','Omkar Patil','1234567890','MALE','01-01-2022','Driver'),
- (4,'driver2@gmail.com','driver2','Sunil','1212121212','MALE','01-01-2022','Driver');
+INSERT INTO `user` (`userId`,`emailId`,`password`,`fullName`,`mobileNumber`,`gender`,`dob`,`vehicleName`,`vehicleNumber`,`type`) VALUES 
+ (1,'ppp@gmail.com','ppp','Pravin P Patil','1234567890','MALE','01-01-2022','','','Admin'),
+ (2,'test@gmail.com','new','Tester','1234567890','MALE','01-11-1212','','','Farmer'),
+ (3,'driver@gmail.com','driver','Omkar Patil','1234567890','MALE','01-01-2022','','','Driver'),
+ (4,'driver2@gmail.com','driver2','Sunil','1212121212','MALE','01-01-2022','','','Driver'),
+ (5,'newdriver@test.com','newdriver','New Driver','1234567890','MALE','2022-01-01','Mahindra and Mahindra','01-MH-2022','Farmer'),
+ (6,'testdriver@test.com','test','testdriver','1234567890','MALE','2022-01-01','tata motors','01-MH-2022','Driver'),
+ (7,'1driver@test.com','1driver','1driver','1111111111','MALE','2222-01-01','Scooti pept','01-MH-2022','Driver'),
+ (8,'2driver@test.com','2driver','2driver','1234567890','MALE','0001-01-01','Scooti pept','','Driver');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
 
@@ -559,18 +565,23 @@ DELIMITER ;
 DROP PROCEDURE IF EXISTS `registerUser`;
 DELIMITER $$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `registerUser`(
-IN p_emailId varchar(100), 
-IN p_password varchar(15),
-IN p_fullName varchar(100), 
-IN p_mobileNo varchar(15),
-IN p_gender varchar(10), 
-IN p_dob varchar(10))
-BEGIN
-	
-	insert into user(emailId, password, fullName, mobileNumber, gender, dob) 
-    values(p_emailId,p_password,p_fullName,p_mobileNo,p_gender,p_dob);
-	
+CREATE DEFINER=`root`@`localhost` PROCEDURE `registerUser`(
+IN p_emailId varchar(100),
+IN p_password varchar(15),
+IN p_fullName varchar(100),
+IN p_mobileNo varchar(15),
+IN p_gender varchar(10),
+IN p_dob varchar(10),
+IN p_vehicleName varchar(45),
+IN p_vehicleNumber varchar(45),
+IN p_userType varchar(45)
+)
+BEGIN
+
+	insert into user(emailId, password, fullName, mobileNumber, gender, dob, vehicleName, vehicleNumber, type)
+
+    values(p_emailId,p_password,p_fullName,p_mobileNo,p_gender,p_dob, p_vehicleName, p_vehicleNumber, p_userType);
+
 END $$
 
 DELIMITER ;

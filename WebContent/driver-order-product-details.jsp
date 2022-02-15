@@ -1,3 +1,4 @@
+
 <%@page import="org.pk.ecommerce.dao.CommonDao"%>
 <%@page import="java.util.stream.Stream"%>
 <%@page import="java.util.stream.Collectors"%>
@@ -41,7 +42,7 @@ System.out.println(driver);
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-<title>Admin Order Details | Online Agree Pet Zone</title>
+<title>Driver Order Details | Online Agree Pet Zone</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <link href="css/prettyPhoto.css" rel="stylesheet">
@@ -82,9 +83,9 @@ System.out.println(driver);
 								</a></li>
 								<li><a href="userProfile.jsp"><i class="fa fa-user"></i>
 										Account</a></li>
-								<li><a href="admin-orders.jsp"><i class="fa fa-shop"></i>Orders</a></li>
-								<li><a href="viewFeedback.jsp"><i class="fa fa-eye"></i>Feedback</a></li>
-								<li><a href="adminLogin.jsp"><i class="fa fa-lock"></i><%=user == null ? "Login" : "Log Out"%></a></li>
+								<li><a href="driver-orders.jsp"> Orders</a></li>
+								<li><a href="driverLogin.jsp"><i class="fa fa-lock"></i>
+										<%=user == null ? "Login" : "Log Out"%> </a></li>
 							</ul>
 						</div>
 					</div>
@@ -98,7 +99,7 @@ System.out.println(driver);
 	<section>
 		<div class="container">
 			<div class="row" style="padding-top: 20px">
-				<div class="col-sm-12">
+				<div class="col-sm-12 ">
 					<div class="features_items">
 						<h2 class="title text-center">Order Details List</h2>
 						<div class="row">
@@ -109,30 +110,26 @@ System.out.println(driver);
 								<br /> <label>DateTime - <%=purchaseMaster.getPurchaseDateTime()%></label><br />
 								<label>Grand Total -<%=purchaseMaster.getPurchaseDetails().stream().map(pd1 -> pd1.getQuantity() * pd1.getPrice())
 		.collect(Collectors.toList()).stream().reduce(0.0, Double::sum)%>
-								</label> <br />
-								<form action="ecommerce?action=assignDriver" method="post">
-									<label>Status - <%=purchaseMaster.getStatus()%></label><br />
+								</label> <br /> <label>Status - <%=purchaseMaster.getStatus()%></label><br />
+								<%
+								if (driver != null) {
+								%>
+								<label>Driver - <%=driver.getFullName()%></label><br />
+								<%
+								}
+								%>
+								<form action="ecommerce?action=updateOrderStatus" method="post">									
 									<%
-									if (driver != null) {
+									if (!"Order Delivered".equals(purchaseMaster.getStatus()) && !"Order Cancelled".equals(purchaseMaster.getStatus())) {
 									%>
-									<label>Driver - <%=driver.getFullName()%></label>
-									<%
-									} else {
-									%>
-									<br /> <input type="text" name="orderId"
-										value="<%=purchaseMaster.getPurchaseMasterId()%>"> <label>Assign
-										Order To - <select name="driverId" class="form-control">
-											<%
-											for (User d : driverList) {
-											%>
-											<option value="<%=d.getUserId()%>">
-												<%=d.getFullName()%>
-											</option>
-											<%
-											}
-											%>
+									<input type="text" name="orderId"
+										value="<%=purchaseMaster.getPurchaseMasterId()%>"> <br />
+									<label>Update Order - <select name="orderStatus"
+										class="form-control">
+											<option value="Order Delivered">Order Delivered</option>
+											<option value="Order Cancelled">Order Cancelled</option>
 									</select>
-										<button type="submit">Assign Driver</button>
+										<button type="submit">Update</button>
 									</label>
 									<%
 									}

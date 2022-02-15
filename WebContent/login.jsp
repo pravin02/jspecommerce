@@ -76,7 +76,7 @@ String failedMesage = request.getParameter("failed");
 					<%
 					if (failedMesage != null) {
 					%>
-					<span style="color: #FF0000; font-size: 20px"><%=failedMesage %></span>
+					<span style="color: #FF0000; font-size: 20px"><%=failedMesage%></span>
 					<%
 					}
 					%>
@@ -135,7 +135,7 @@ String failedMesage = request.getParameter("failed");
 								type="email" name="emailId" placeholder="Email Address" /> <input
 								type="password" name="password" placeholder="Password" /> <input
 								type="text" name="mobileNumber" placeholder="Contact" /> <input
-								type="text" name="dob" placeholder="Date Of Birth" /> <select
+								type="date" name="dob" placeholder="Date Of Birth" /> <select
 								name="gender">
 								<option value="MALE">MALE</option>
 								<option value="FEMALE">FEMALE</option>

@@ -1,3 +1,4 @@
+<%@page import="org.pk.ecommerce.entities.user.UserType"%>
 <%@page import="org.pk.ecommerce.dao.CustomerDao"%>
 <%@page import="org.springframework.beans.factory.annotation.Autowired"%>
 <%@page
@@ -24,7 +25,7 @@ String message = request.getParameter("message");
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-<title>User Profile | Online Agree Pet Zone</title>
+<title><%=user.getType().name() %> Profile | Online Agree Pet Zone</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <link href="css/prettyPhoto.css" rel="stylesheet">
@@ -60,24 +61,31 @@ String message = request.getParameter("message");
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
-
+								<li><a href="javascript:void(0)">Welcome, <%=user.getFullName()%>
+										(<%=user.getType().name()%>)
+								</a></li>
 								<li><a href="userProfile.jsp"><i class="fa fa-user"></i>
 										Account</a></li>
+										<%
+								if (UserType.Admin.name().equals(user.getType().name())) {
+								%>
+								<li><a href="admin-orders.jsp"><i class="fa fa-shop"></i>Orders</a></li>
+								<li><a href="viewFeedback.jsp"><i class="fa fa-eye"></i>Feedback</a></li>								
+								<%
+								} else if (UserType.Driver.name().equals(user.getType().name())) {
+								%>
+								<li><a href="driver-orders.jsp"><i class="fa fa-shop"></i>Orders</a></li>
+								<%
+								} else if (UserType.Farmer.name().equals(user.getType().name())) {
+								%>
 								<li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i>
 										Cart</a></li>
-								<%
-								if (user == null) {
-								%>
-								<li><a href="login.jsp"><i class="fa fa-lock"></i>Login</a></li>
-								<%
-								} else {
-								%>
 								<li><a href="orders.jsp"><i class="fa fa-shop"></i>Orders</a></li>
 								<li><a href="submitFeedback.jsp"><i class="fa fa-lock"></i>Feedback</a></li>
-								<li><a href="login.jsp"><i class="fa fa-lock"></i>Logout</a></li>
 								<%
 								}
 								%>
+								<li><a href="login.jsp"><i class="fa fa-lock"></i><%=user == null ? "Login" : "Log Out"%></a></li>
 							</ul>
 						</div>
 					</div>

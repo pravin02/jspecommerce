@@ -483,4 +483,17 @@ public class CustomerDaoImpl implements CustomerDao {
 
 		return (list != null && !list.isEmpty()) ? list : null;
 	}
+
+	@Override
+	public List<PurchaseMaster> getPurchaseMasterForDriver(int userId) {
+		String SQL = "select * from purchasemaster where driverId=?";
+		List<PurchaseMaster> list = jdbcTemplateObject.query(SQL, this::mapRsToPurchaseMaster, new Object[] { userId });
+		return (list != null && !list.isEmpty()) ? list : null;
+	}
+
+	@Override
+	public boolean updateOrderStatus(int orderId, String status) {
+		String SQL = "update purchasemaster set status=?  where purchaseMasterid=?;";
+		return jdbcTemplateObject.update(SQL, new Object[] { status, orderId }) > 1 ? true : false;
+	}
 }

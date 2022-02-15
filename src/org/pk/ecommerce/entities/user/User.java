@@ -17,6 +17,8 @@ public class User {
 	private String oldPassword;
 	private String newPassword;
 	private String confirmPassword;
+	private String vehicleName;
+	private String vehicleNumber;
 
 	private List<Cart> carts;
 
@@ -202,16 +204,43 @@ public class User {
 		this.confirmPassword = confirmPassword;
 	}
 
-	/*
-	 * (non-Javadoc)
+	/**
+	 * @return the vehicleName
+	 */
+	public String getVehicleName() {
+		return vehicleName;
+	}
+
+	/**
+	 * @param vehicleName the vehicleName to set
+	 */
+	public void setVehicleName(String vehicleName) {
+		this.vehicleName = vehicleName;
+	}
+
+	/**
+	 * @return the vehicleNumber
+	 */
+	public String getVehicleNumber() {
+		return vehicleNumber;
+	}
+
+	/**
+	 * @param vehicleNumber the vehicleNumber to set
+	 */
+	public void setVehicleNumber(String vehicleNumber) {
+		this.vehicleNumber = vehicleNumber;
+	}
+
+	/**
 	 * 
-	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		return "User [userId=" + userId + ", emailId=" + emailId + ", password=" + password + ", fullName=" + fullName
-				+ ", gender=" + gender + ", dob=" + dob + ", mobileNo=" + mobileNo + ", type=" + type.name()
-				+ ", carts.size=" + (carts != null ? carts.size() : 0) + "]";
+				+ ", gender=" + gender + ", dob=" + dob + ", mobileNo=" + mobileNo + ", type=" + type + ", oldPassword="
+				+ oldPassword + ", newPassword=" + newPassword + ", confirmPassword=" + confirmPassword
+				+ ", vehicleName=" + vehicleName + ", vehicleNumber=" + vehicleNumber + ", carts=" + carts + "]";
 	}
 
 }

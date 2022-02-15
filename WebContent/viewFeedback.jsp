@@ -64,72 +64,20 @@ List<Feedback> fdList = customerDao.viewAllFeedbacks();
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
-								<li><a href="admin-orders.jsp"><i class="fa fa-user"></i>
-										Welcome, <%=user.getFullName()%></a></li>
+								<li>
+								<a href="javascript:void(0)">Welcome, <%=user.getFullName() %> (<%=user.getType().name() %>)</a></li>
 								<li><a href="userProfile.jsp"><i class="fa fa-user"></i>
 										Account</a></li>
-								<%
-								if (user == null) {
-								%>
-								<li><a href="login.jsp"><i class="fa fa-lock"></i>
-										Login</a></li>
-								<%
-								} else {
-								%>
+								
 								<li><a href="admin-orders.jsp"><i class="fa fa-shop"></i>Orders</a></li>
-								<li><a href="login.jsp"><i class="fa fa-lock"></i> Log
-										out</a></li>
-								<%
-								}
-								%>
+								<li><a href="adminLogin.jsp"><i class="fa fa-lock"></i><%=user == null ? "Login" : "Log Out"%></a></li>
 							</ul>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-		<!--/header-middle-->
-
-		<div class="header-bottom">
-			<!--header-bottom-->
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-9">
-						<div class="navbar-header">
-							<button type="button" class="navbar-toggle"
-								data-toggle="collapse" data-target=".navbar-collapse">
-								<span class="sr-only">Toggle navigation</span> <span
-									class="icon-bar"></span> <span class="icon-bar"></span> <span
-									class="icon-bar"></span>
-							</button>
-						</div>
-						<div class="mainmenu pull-left">
-							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a href="index.jsp">Home</a></li>
-								<li class="dropdown"><a href="#">Shop<i
-										class="fa fa-angle-down"></i></a>
-									<ul role="menu" class="sub-menu">
-										<li><a href="index.jsp">Product List</a></li>
-										<!-- <li><a href="checkout.jsp">Checkout</a></li> -->
-										<li><a href="cart.jsp">Cart</a></li>
-										<li>
-											<%
-											if (user == null) {
-											%> <a href="login.jsp"> Login</a> <%
- } else {
- %> <a href="login.jsp"> Log out</a> <%
- }
- %>
-										</li>
-									</ul>
-								<li><a href="contact-us.jsp">Contact</a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!--/header-bottom-->
+		<!--/header-middle-->		
 	</header>
 	<!--/header-->
 

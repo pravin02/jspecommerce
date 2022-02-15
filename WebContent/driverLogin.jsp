@@ -4,6 +4,7 @@
 <%
 session.removeAttribute(GlobalConstants.USER_DETAILS);
 String failedMessage = request.getParameter("failed");
+String registerMessage = request.getParameter("register");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -78,10 +79,29 @@ String failedMessage = request.getParameter("failed");
 					<%
 					}
 					%>
+					<%
+					if (registerMessage != null && "SUCCESS".equalsIgnoreCase(registerMessage)) {
+					%>
+					<span style="color: #00FF00; font-size: 20px">Driver
+						Registered Successfully.</span>
+					<%
+					} else if (registerMessage != null && "FAILED".equalsIgnoreCase(registerMessage)) {
+					%>
+					<span style="color: #FF0000; font-size: 20px">Error while
+						registering driver</span>
+					<%
+					} else if (registerMessage != null && "EXISTS".equalsIgnoreCase(registerMessage)) {
+					%>
+					<span style="color: #FF0000; font-size: 20px">Driver already
+						exists</span>
+					<%
+					}
+					%>
+
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-sm-4 col-sm-offset-4">
+				<div class="col-sm-4 col-sm-offset-1">
 					<div class="login-form">
 						<!--login form-->
 						<h2>Driver Login to your account</h2>
@@ -95,6 +115,32 @@ String failedMessage = request.getParameter("failed");
 						</form>
 					</div>
 					<!--/login form-->
+				</div>
+				<div class="col-sm-1">
+					<h2 class="or">OR</h2>
+				</div>
+				<div class="col-sm-4">
+					<div class="signup-form">
+						<!--sign up form-->
+						<h2>New Driver Signup!</h2>
+						<form action="common?action=registerDriver" method="post">
+							<input type="text" name="fullName" placeholder="Full Name" /> <input
+								type="email" name="emailId" placeholder="Email Address" /> <input
+								type="password" name="password" placeholder="Password" /> <input
+								type="text" name="mobileNumber" placeholder="Contact" /> <input
+								type="date" name="dob" placeholder="Date Of Birth" /> <select
+								name="gender">
+								<option value="MALE">MALE</option>
+								<option value="FEMALE">FEMALE</option>
+							</select> <br />
+							<br /> <input type="text" name="vehicleName"
+								placeholder="Vehicle Name" /> <input type="text"
+								name="vehicleNumber" placeholder="Vehicle Number" /> <br>
+							<br>
+							<button type="submit" class="btn btn-default">Register</button>
+						</form>
+					</div>
+					<!--/sign up form-->
 				</div>
 			</div>
 		</div>

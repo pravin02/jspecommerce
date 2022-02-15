@@ -56,9 +56,9 @@ public class CommonDaoImpl implements CommonDao {
 	 */
 	@Override
 	public boolean registerUser(User user) {
-		String SQL = "{CALL registerUser(?, ?, ?, ?, ?, ?)}";
+		String SQL = "{CALL registerUser(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 		return jdbcTemplateObject.update(SQL, new Object[] { user.getEmailId(), user.getPassword(), user.getFullName(),
-				user.getMobileNo(), user.getGender(), user.getDob() }) == 1 ? true : false;
+				user.getMobileNo(), user.getGender(), user.getDob(), user.getVehicleName(), user.getVehicleNumber(), user.getType().name() }) == 1 ? true : false;
 
 	}
 

@@ -35,9 +35,13 @@ public class CommonServlet extends HttpServlet {
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
-		// register farmer action
-		if ("registerUser".equalsIgnoreCase(action)) {
-			doActionRegisterUser(request, response);
+		// register farmer or Driver action
+		if (action.contains("register")) {
+			if (action.contains("Driver")) {
+				doActionRegisterUser(request, response, UserType.Driver.name());
+			} else {
+				doActionRegisterUser(request, response, UserType.Farmer.name());
+			}
 		}
 
 		// farmer login action
@@ -105,7 +109,7 @@ public class CommonServlet extends HttpServlet {
 			if (UserType.Admin.name().equals(user.getType().name())) {
 				response.sendRedirect("admin-orders.jsp");
 			} else if (UserType.Driver.name().equals(user.getType().name())) {
-				response.sendRedirect("driver-index.jsp");
+				response.sendRedirect("driver-orders.jsp");
 			} else {
 				response.sendRedirect("index.jsp");
 			}
@@ -122,9 +126,10 @@ public class CommonServlet extends HttpServlet {
 	 * @param response
 	 * @throws IOException
 	 */
-	public void doActionRegisterUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void doActionRegisterUser(HttpServletRequest request, HttpServletResponse response, String userType)
+			throws IOException {
 		String MESSAGE = "";
-		User user = fillUserDetails(request);
+		User user = fillUserDetails(request, userType);
 		if (!commonDao.isUserAllreadyRegistered(user.getEmailId())) {
 			if (commonDao.registerUser(user)) {
 				MESSAGE = "SUCCESS";
@@ -134,7 +139,10 @@ public class CommonServlet extends HttpServlet {
 		} else {
 			MESSAGE = "EXISTS";
 		}
-		response.sendRedirect("login.jsp?register=" + MESSAGE);
+		if (UserType.Farmer.name().equals(userType))
+			response.sendRedirect("login.jsp?register=" + MESSAGE);
+		else
+			response.sendRedirect(userType.toLowerCase() + "Login.jsp?register=" + MESSAGE);
 	}
 
 	/**
@@ -142,7 +150,7 @@ public class CommonServlet extends HttpServlet {
 	 * @param request
 	 * @return
 	 */
-	public User fillUserDetails(HttpServletRequest request) {
+	public User fillUserDetails(HttpServletRequest request, String userType) {
 		String emailId = request.getParameter("emailId");
 		String password = request.getParameter("password");
 		String gender = request.getParameter("gender");
@@ -150,12 +158,24 @@ public class CommonServlet extends HttpServlet {
 		String mobileNo = request.getParameter("mobileNumber");
 		String dob = request.getParameter("dob");
 		User user = new User();
+
 		user.setEmailId(emailId);
 		user.setPassword(password);
 		user.setFullName(fullName);
 		user.setGender(gender);
 		user.setMobileNo(mobileNo);
 		user.setDob(dob);
+		user.setType(UserType.Farmer);
+
+		if (UserType.Driver.name().equals(userType)) {
+			String vehicleName = request.getParameter("vehicleName");
+			String vehicleNumber = request.getParameter("vehicleNumber");
+
+			user.setVehicleName(vehicleName);
+			user.setVehicleNumber(vehicleNumber);
+			user.setType(UserType.getUserType(userType));
+		}
+
 		return user;
 	}
 
