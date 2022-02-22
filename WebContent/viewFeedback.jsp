@@ -68,7 +68,8 @@ List<Feedback> fdList = customerDao.viewAllFeedbacks();
 								<a href="javascript:void(0)">Welcome, <%=user.getFullName() %> (<%=user.getType().name() %>)</a></li>
 								<li><a href="userProfile.jsp"><i class="fa fa-user"></i>
 										Account</a></li>
-								
+								<li><a href="addProduct.jsp"><i class="fa fa-shop"></i>Add
+										Product</a></li>
 								<li><a href="admin-orders.jsp"><i class="fa fa-shop"></i>Orders</a></li>
 								<li><a href="adminLogin.jsp"><i class="fa fa-lock"></i><%=user == null ? "Login" : "Log Out"%></a></li>
 							</ul>

@@ -496,4 +496,19 @@ public class CustomerDaoImpl implements CustomerDao {
 		String SQL = "update purchasemaster set status=?  where purchaseMasterid=?;";
 		return jdbcTemplateObject.update(SQL, new Object[] { status, orderId }) > 1 ? true : false;
 	}
+
+	@Override
+	public boolean addProduct(Product product) {
+		String SQL = "insert into product(subCategoryId, productName, companyName, imageNamePath, price, quantity, description) values(?, ?, ?, ?, ?, ?, ?)";
+		return jdbcTemplateObject.update(SQL, 
+				new Object[] { product.getSubCategory().getSubCategoryId(),
+						product.getProductName(),
+						product.getCompanyName(),
+						product.getImageNamePath(),						
+						product.getPrice(),
+						product.getQuantity(),
+						product.getDescription()
+						}) 
+				> 1 ? true : false;
+	}
 }

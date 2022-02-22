@@ -163,4 +163,12 @@ public class Product {
 		this.isDeleted = isDeleted;
 	}
 
+	@Override
+	public String toString() {
+		return "Product [productId=" + productId + ", subCategory=" + subCategory + ", companyName=" + companyName
+				+ ", productName=" + productName + ", imageNamePath=" + imageNamePath + ", priceRange=" + priceRange
+				+ ", quantity=" + quantity + ", discount=" + discount + ", description=" + description + ", isDeleted="
+				+ isDeleted + "]";
+	}
+
 }

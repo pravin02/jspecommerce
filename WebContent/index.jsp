@@ -88,6 +88,7 @@ try {
 								<%
 								} else {
 								%>
+								<li><a href="addProduct.jsp"><i class="fa fa-shop"></i>Add Product</a></li>
 								<li><a href="orders.jsp"><i class="fa fa-shop"></i>Orders</a></li>
 								<li><a href="submitFeedback.jsp"><i class="fa fa-lock"></i>Feedback</a></li>
 								<li><a href="login.jsp"><i class="fa fa-lock"></i>Logout</a></li>

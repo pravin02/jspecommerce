@@ -67,8 +67,8 @@ double subTotal = 0, total = 0;
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
-								<li>
-								<a href="javascript:void(0)"><%=user.getFullName() %> (<%=user.getType().name() %>)</a></li>
+								<li><a href="javascript:void(0)"><%=user.getFullName()%>
+										(<%=user.getType().name()%>)</a></li>
 								<li><a href="userProfile.jsp"><i class="fa fa-user"></i>
 										Account</a></li>
 								<li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i>
@@ -81,6 +81,8 @@ double subTotal = 0, total = 0;
 								<%
 								} else {
 								%>
+								<li><a href="addProduct.jsp"><i class="fa fa-shop"></i>Add
+										Product</a></li>
 								<li><a href="orders.jsp"><i class="fa fa-shop"></i>Orders</a></li>
 								<li><a href="submitFeedback.jsp"><i class="fa fa-lock"></i>Feedback</a></li>
 								<li><a href="login.jsp" name="logout"><i
@@ -101,7 +103,7 @@ double subTotal = 0, total = 0;
 		<section id="cart_items">
 			<div class="container">
 				<div class="row alert alert-info"
-					style="display: <%=request.getAttribute("message") == null ? "none" : "block" %> ">
+					style="display: <%=request.getAttribute("message") == null ? "none" : "block"%> ">
 					<div class="col-md-12 col-md-offset-4 ">
 						<%=request.getAttribute("message") == null ? "" : request.getAttribute("message")%>
 					</div>

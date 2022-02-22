@@ -67,8 +67,8 @@ List<PurchaseMaster> purchaseMasterList = this.customerDao.getPurchaseMaster(use
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
-<li>
-								<a href="javascript:void(0)"><%=user.getFullName() %> (<%=user.getType().name() %>)</a></li>
+								<li><a href="javascript:void(0)"><%=user.getFullName()%>
+										(<%=user.getType().name()%>)</a></li>
 								<li><a href="userProfile.jsp"><i class="fa fa-user"></i>
 										Account</a></li>
 								<li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i>
@@ -80,6 +80,8 @@ List<PurchaseMaster> purchaseMasterList = this.customerDao.getPurchaseMaster(use
 								<%
 								} else {
 								%>
+								<li><a href="addProduct.jsp"><i class="fa fa-shop"></i>Add
+										Product</a></li>
 								<li><a href="submitFeedback.jsp"><i class="fa fa-lock"></i>Feedback</a></li>
 								<li><a href="login.jsp"><i class="fa fa-lock"></i>Logout</a></li>
 								<%

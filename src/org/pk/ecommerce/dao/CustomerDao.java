@@ -60,6 +60,13 @@ public interface CustomerDao {
 	Product getProduct(int productId);
 
 	/**
+	 * 
+	 * @param product
+	 * @return
+	 */
+	boolean addProduct(Product product);
+
+	/**
 	 * @param purchaseMaster
 	 * @return
 	 */
@@ -78,7 +85,7 @@ public interface CustomerDao {
 	List<PurchaseMaster> getPurchaseMaster(int userId);
 
 	List<PurchaseMaster> getPurchaseMasterForAdmin();
-	
+
 	List<PurchaseMaster> getPurchaseMasterForDriver(int userId);
 
 	PurchaseMaster getPurchaseMasterByUserId(int orderId);
@@ -130,11 +137,11 @@ public interface CustomerDao {
 	Cart getProductsFromCart(int userId);
 
 	void emptyCart(int userId);
-	
+
 	boolean assignDriverToOrder(int orderId, int driverId);
-	
+
 	List<Feedback> viewAllFeedbacks();
-	
+
 	boolean updateOrderStatus(int orderId, String status);
 
 }

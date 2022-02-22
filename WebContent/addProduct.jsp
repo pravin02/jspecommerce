@@ -1,3 +1,7 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="org.pk.ecommerce.entities.product.SubCategory"%>
+<%@page import="org.pk.ecommerce.entities.product.Category"%>
+<%@page import="java.util.List"%>
 <%@page import="org.pk.ecommerce.entities.user.UserType"%>
 <%@page import="org.pk.ecommerce.dao.CustomerDao"%>
 <%@page import="org.springframework.beans.factory.annotation.Autowired"%>
@@ -15,9 +19,20 @@
 	private CustomerDao customerDao;%>
 <%
 User user = (User) session.getAttribute(GlobalConstants.USER_DETAILS);
-String message = request.getParameter("message");
-%>
 
+List<Category> categories = customerDao.getAllCategories();
+List<SubCategory> subCategories = new ArrayList<>(0);
+int categoryId = 0;
+try {
+	categoryId = Integer.parseInt(request.getParameter("categoryId"));
+	if (categoryId > 0) {
+		subCategories = customerDao.getSubCategoriesByCategoryId(categoryId);
+	}
+} catch (Exception e) {
+}
+
+String message = (String) request.getAttribute("message");
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,8 +40,7 @@ String message = request.getParameter("message");
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-<title><%=user.getType().name()%> Profile | Online Agree Pet
-	Zone</title>
+<title>Add Product | Online Agree Pet Zone</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <link href="css/prettyPhoto.css" rel="stylesheet">
@@ -70,8 +84,6 @@ String message = request.getParameter("message");
 								<%
 								if (UserType.Admin.name().equals(user.getType().name())) {
 								%>
-								<li><a href="addProduct.jsp"><i class="fa fa-shop"></i>Add
-										Product</a></li>
 								<li><a href="admin-orders.jsp"><i class="fa fa-shop"></i>Orders</a></li>
 								<li><a href="viewFeedback.jsp"><i class="fa fa-eye"></i>Feedback</a></li>
 								<%
@@ -81,8 +93,6 @@ String message = request.getParameter("message");
 								<%
 								} else if (UserType.Farmer.name().equals(user.getType().name())) {
 								%>
-								<li><a href="addProduct.jsp"><i class="fa fa-shop"></i>Add
-										Product</a></li>
 								<li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i>
 										Cart</a></li>
 								<li><a href="orders.jsp"><i class="fa fa-shop"></i>Orders</a></li>
@@ -105,37 +115,60 @@ String message = request.getParameter("message");
 		<div class="container">
 			<div class="row">
 				<div class="col-md-4 col-md-offset-4">
-					<%
-					if (message != null) {
-					%>
-					<span style="font-size: 20px"><%=message%></span>
-					<%
-					}
-					%>
+				<%=message != null ? message : "" %>
 				</div>
 			</div>
 			<div class="row">
 				<div class="signup-form col-md-4 col-md-offset-4">
 					<!--sign up form-->
-					<h2 style="text-align: center;">Update Profile</h2>
-					<form action="common?action=updateUser" method="post">
-						<input type="text" name="userId" placeholder="UserId"
-							value="<%=user.getUserId()%>" style="display: none" /> <input
-							type="text" name="fullName" placeholder="Full Name"
-							value="<%=user.getFullName()%>" disabled="disabled" /> <input
-							type="email" id="emailId" name="emailId"
-							placeholder="Email Address" value="<%=user.getEmailId()%>" /> <input
-							type="text" name="mobileNumber" value="<%=user.getMobileNo()%>"
-							placeholder="Contact" /> <input type="text" name="gender"
-							value="<%=user.getGender()%>" placeholder="Gender"
-							disabled="disabled" /> <input type="text" name="dob"
-							value="<%=user.getDob()%>" placeholder="Date Of Birth"
-							disabled="disabled" /> <input type="text" name="oldPassword"
-							placeholder="Old Password" /> <input type="text"
-							name="newPassword" placeholder="New Password" /> <input
-							type="text" name="confirmPassword" placeholder="Confirm Password" />
-						<br>
-						<button type="submit" class="btn btn-default">Update</button>
+					<h2 style="text-align: center;">Add Product</h2>
+					<form action="ecommerce?action=addProduct" method="post"
+						enctype="multipart/form-data">
+						<script type="text/javascript">
+							function categoryChangeEvent() {
+								let catId = document
+										.getElementById("categoryId").value;								
+								window.location = window.location.origin + window.location.pathname
+										+ "?categoryId=" + catId;
+							}
+						</script>
+						<select name="categoryId" id="categoryId"
+							onchange="categoryChangeEvent()">
+							<option value="0">Select Category</option>
+							<%
+							if (categories != null && !categories.isEmpty()) {
+								for (Category category : categories) {
+							%>
+							<option value=<%=category.getCategoryId()%>>
+								<%=category.getCategoryName()%></option>
+							<%
+							}
+							}
+							%>
+						</select><br /> <br /> <select name="subCategoryId">
+							<option value="0">Select Sub Category</option>
+							<%
+							if (subCategories != null && !subCategories.isEmpty()) {
+								for (SubCategory subCategory : subCategories) {
+							%>
+							<option value=<%=subCategory.getSubCategoryId()%>>
+								<%=subCategory.getSubCategoryName()%></option>
+							<%
+							}
+							}
+							%>
+						</select><br /> <br /> <input type="text" name="productName"
+							placeholder="Please enter Product Name"> <br /> <input
+							type="text" name="companyName"
+							placeholder="Please enter Company Name"> <br /> <input
+							type="text" name="price" placeholder="Please enter price">
+						<br /> <input type="text" name="quantity"
+							placeholder="Please enter quantity"> <br /> 
+							<input
+							type="file" name="image"> <br />
+							<textarea rows="10" cols="10" name="description" placeholder="Enter product description here">
+							</textarea>
+						<button type="submit" class="btn btn-default">Submit</button>
 						<br> <br>
 					</form>
 				</div>
@@ -151,5 +184,13 @@ String message = request.getParameter("message");
 	<script src="js/price-range.js"></script>
 	<script src="js/jquery.prettyPhoto.js"></script>
 	<script src="js/main.js"></script>
+	<script type="text/javascript">
+	var catIdControl = document.getElementById('categoryId');
+	var len;
+	for (var i = 0, len = catIdControl.length; i < len; i++) {
+		if (catIdControl[i].value == <%=categoryId %>)
+			catIdControl.options[i].selected = true;
+	}
+</script>
 </body>
 </html>

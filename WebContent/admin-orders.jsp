@@ -66,12 +66,15 @@ List<PurchaseMaster> purchaseMasterList = this.customerDao.getPurchaseMasterForA
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
-								<li>
-								<a href="javascript:void(0)">Welcome, <%=user.getFullName() %> (<%=user.getType().name() %>)</a></li>
+								<li><a href="javascript:void(0)">Welcome, <%=user.getFullName()%>
+										(<%=user.getType().name()%>)
+								</a></li>
 								<li><a href="userProfile.jsp"><i class="fa fa-user"></i>
-										Account</a></li>								
+										Account</a></li>
+								<li><a href="addProduct.jsp"><i class="fa fa-shop"></i>Add
+										Product</a></li>
 								<li><a href="viewFeedback.jsp"><i class="fa fa-eye"></i>Feedback</a></li>
-								<li><a href="adminLogin.jsp"><i class="fa fa-lock"></i><%=user== null ? "Login" : "Log Out" %></a></li>
+								<li><a href="adminLogin.jsp"><i class="fa fa-lock"></i><%=user == null ? "Login" : "Log Out"%></a></li>
 							</ul>
 						</div>
 					</div>
@@ -84,7 +87,7 @@ List<PurchaseMaster> purchaseMasterList = this.customerDao.getPurchaseMasterForA
 
 	<section>
 		<div class="container">
-			<div class="row" style="padding-top: 20px">				
+			<div class="row" style="padding-top: 20px">
 				<div class="col-sm-12">
 					<div class="features_items">
 						<h2 class="title text-center">Orders List</h2>
