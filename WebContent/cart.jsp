@@ -81,6 +81,8 @@ double subTotal = 0, total = 0;
 								<%
 								} else {
 								%>
+								<li><a href="startAuction.jsp"><i class="fa fa-shop"></i>Start Auction</a></li>
+								<li><a href="myAuctions.jsp"><i class="fa fa-shop"></i>My Auction</a></li>
 								<li><a href="addProduct.jsp"><i class="fa fa-shop"></i>Add
 										Product</a></li>
 								<li><a href="orders.jsp"><i class="fa fa-shop"></i>Orders</a></li>

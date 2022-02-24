@@ -103,7 +103,6 @@ public class CommonServlet extends HttpServlet {
 	 */
 	public void doActionLogin(HttpServletRequest request, HttpServletResponse response, User user) throws IOException {
 		if (user != null) {
-			System.out.println(" login : user=>" + user.getType().name());
 			HttpSession session = request.getSession();
 			session.setAttribute(GlobalConstants.USER_DETAILS, user);
 			if (UserType.Admin.name().equals(user.getType().name())) {

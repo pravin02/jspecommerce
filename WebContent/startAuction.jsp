@@ -1,3 +1,4 @@
+<%@page import="org.pk.ecommerce.entities.product.Product"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="org.pk.ecommerce.entities.product.SubCategory"%>
 <%@page import="org.pk.ecommerce.entities.product.Category"%>
@@ -20,18 +21,26 @@
 <%
 User user = (User) session.getAttribute(GlobalConstants.USER_DETAILS);
 
+String message = (String) request.getAttribute("message");
+
 List<Category> categories = customerDao.getAllCategories();
 List<SubCategory> subCategories = new ArrayList<>(0);
+List<Product> products = new ArrayList<>(0);
+
 int categoryId = 0;
+int subCategoryId = 0;
 try {
-	categoryId = Integer.parseInt(request.getParameter("categoryId"));
+	categoryId = Integer.parseInt(request.getParameter("categoryId"));	
 	if (categoryId > 0) {
 		subCategories = customerDao.getSubCategoriesByCategoryId(categoryId);
+	}
+	subCategoryId = Integer.parseInt(request.getParameter("subCategoryId"));
+	if (categoryId > 0) {
+		products = customerDao.getAllProductList(subCategoryId, "", 0.0 );
 	}
 } catch (Exception e) {
 }
 
-String message = (String) request.getAttribute("message");
 %>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,7 +49,7 @@ String message = (String) request.getAttribute("message");
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-<title>Add Product | Online Agree Pet Zone</title>
+<title>Start Auction | Online Agree Pet Zone</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <link href="css/prettyPhoto.css" rel="stylesheet">
@@ -93,7 +102,7 @@ String message = (String) request.getAttribute("message");
 								<%
 								} else if (UserType.Farmer.name().equals(user.getType().name())) {
 								%>
-								<li><a href="startAuction.jsp"><i class="fa fa-shop"></i>Start Auction</a></li>
+								<li><a href="viewAuctions.jsp"><i class="fa fa-shop"></i>View Auction</a></li>
 								<li><a href="myAuctions.jsp"><i class="fa fa-shop"></i>My Auction</a></li>
 								<li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i>
 										Cart</a></li>
@@ -124,14 +133,22 @@ String message = (String) request.getAttribute("message");
 				<div class="signup-form col-md-4 col-md-offset-4">
 					<!--sign up form-->
 					<h2 style="text-align: center;">Add Product</h2>
-					<form action="ecommerce?action=addProduct" method="post"
-						enctype="multipart/form-data">
+					<form action="ecommerce?action=startAuction" method="post">
 						<script type="text/javascript">
 							function categoryChangeEvent() {
 								let catId = document
 										.getElementById("categoryId").value;								
 								window.location = window.location.origin + window.location.pathname
 										+ "?categoryId=" + catId;
+							}
+							
+							function subCategoryChangeEvent() {
+								let catId = document
+								.getElementById("categoryId").value;
+								let subCatId = document
+										.getElementById("subCategoryId").value;								
+								window.location = window.location.origin + window.location.pathname
+										+ "?categoryId=" + catId+"&subCategoryId="+subCatId;
 							}
 						</script>
 						<select name="categoryId" id="categoryId"
@@ -147,7 +164,8 @@ String message = (String) request.getAttribute("message");
 							}
 							}
 							%>
-						</select><br /> <br /> <select name="subCategoryId">
+						</select><br /> <br /> 
+						<select name="subCategoryId" id="subCategoryId" onchange="subCategoryChangeEvent()">
 							<option value="0">Select Sub Category</option>
 							<%
 							if (subCategories != null && !subCategories.isEmpty()) {
@@ -159,18 +177,25 @@ String message = (String) request.getAttribute("message");
 							}
 							}
 							%>
-						</select><br /> <br /> <input type="text" name="productName"
-							placeholder="Please enter Product Name"> <br /> <input
-							type="text" name="companyName"
-							placeholder="Please enter Company Name"> <br /> <input
+						</select><br /> <br />
+						<select name="productId">
+							<option value="0">Select Product</option>
+							<%
+							if (products != null && !products.isEmpty()) {
+								for (Product product: products) {
+							%>
+							<option value=<%=product.getProductId()%>>
+								<%=product.getProductName()%></option>
+							<%
+							}
+							}
+							%>
+						</select>
+						<br /> <br />
+						 <input
 							type="text" name="price" placeholder="Please enter price">
-						<br /> <input type="text" name="quantity"
-							placeholder="Please enter quantity"> <br /> 
-							<input
-							type="file" name="image"> <br />
-							<textarea rows="10" cols="10" name="description" placeholder="Enter product description here">
-							</textarea>
-						<button type="submit" class="btn btn-default">Submit</button>
+						<br /> 
+						<button type="submit" class="btn btn-default">Start Auction</button>
 						<br> <br>
 					</form>
 				</div>

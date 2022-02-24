@@ -81,6 +81,9 @@ String message = request.getParameter("message");
 								<%
 								} else if (UserType.Farmer.name().equals(user.getType().name())) {
 								%>
+								<li><a href="startAuction.jsp"><i class="fa fa-shop"></i>Start Auction</a></li>
+								<li><a href="myAuctions.jsp"><i class="fa fa-shop"></i>My Auction</a></li>
+								<li><a href="viewAuctions.jsp"><i class="fa fa-shop"></i>View Auction</a></li>
 								<li><a href="addProduct.jsp"><i class="fa fa-shop"></i>Add
 										Product</a></li>
 								<li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i>

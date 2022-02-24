@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.pk.ecommerce.auction.Auction;
+import org.pk.ecommerce.auction.Bid;
 import org.pk.ecommerce.entities.order.PurchaseDetail;
 import org.pk.ecommerce.entities.order.PurchaseMaster;
 import org.pk.ecommerce.entities.product.Cart;
@@ -148,7 +150,6 @@ public class CustomerDaoImpl implements CustomerDao {
 
 		// return jdbcTemplateObject.update("") == 1 ? true: false;
 		return (list != null && !list.isEmpty()) ? list : null;
-
 	}
 
 	/*
@@ -500,15 +501,86 @@ public class CustomerDaoImpl implements CustomerDao {
 	@Override
 	public boolean addProduct(Product product) {
 		String SQL = "insert into product(subCategoryId, productName, companyName, imageNamePath, price, quantity, description) values(?, ?, ?, ?, ?, ?, ?)";
-		return jdbcTemplateObject.update(SQL, 
-				new Object[] { product.getSubCategory().getSubCategoryId(),
-						product.getProductName(),
-						product.getCompanyName(),
-						product.getImageNamePath(),						
-						product.getPrice(),
-						product.getQuantity(),
-						product.getDescription()
-						}) 
-				> 1 ? true : false;
+		return jdbcTemplateObject.update(SQL,
+				new Object[] { product.getSubCategory().getSubCategoryId(), product.getProductName(),
+						product.getCompanyName(), product.getImageNamePath(), product.getPrice(), product.getQuantity(),
+						product.getDescription() }) > 1 ? true : false;
+	}
+
+	@Override
+	public void makeAuction(Auction auction) {
+		String SQL = "insert into auction(sellerId, productId, price, status) values(?, ?, ?, ?)";
+		jdbcTemplateObject.update(SQL, new Object[] { auction.getSellerId(), auction.getProductId(), auction.getPrice(),
+				auction.getStatus() });
+
+	}
+
+	private Auction mapRsToAuction(java.sql.ResultSet rs, int rowMap) throws SQLException {
+		Auction object = new Auction();
+		object.setAuctionId(rs.getInt("auctionId"));
+		object.setSellerId(rs.getInt("sellerId"));
+		object.setSeller(this.commonDao.getUserByUserId(rs.getInt("sellerId")));
+		object.setBuyerId(rs.getInt("buyerId"));
+		object.setBuyer(this.commonDao.getUserByUserId(rs.getInt("buyerId")));
+		object.setProductId(rs.getInt("productId"));
+		object.setProduct(this.getProduct(rs.getInt("productId")));
+		object.setPrice(rs.getInt("price"));
+		object.setBuyPrice(rs.getInt("buyPrice"));
+		object.setStatus(rs.getBoolean("status"));
+		return object;
+	}
+
+	@Override
+	public List<Auction> getAllAuctionsThanLoggedInId(int userId) {
+		String SQL = "select * from auction where sellerId <> ?";
+		List<Auction> list = jdbcTemplateObject.query(SQL, this::mapRsToAuction, new Object[] { userId });
+		return (list != null && !list.isEmpty()) ? list : null;
+	}
+
+	@Override
+	public List<Auction> getAllAuctionsRaisedByMe(int userId) {
+		String SQL = "select * from auction where sellerId = ?";
+		List<Auction> list = jdbcTemplateObject.query(SQL, this::mapRsToAuction, new Object[] { userId });
+		return (list != null && !list.isEmpty()) ? list : null;
+	}
+
+	private Bid mapRsToBid(java.sql.ResultSet rs, int rowMap) throws SQLException {
+		Bid object = new Bid();
+		object.setBidId(rs.getInt("bidId"));
+		object.setAuctionId(rs.getInt("auctionId"));
+		object.setBidderId(rs.getInt("bidderId"));
+		object.setBidder(this.commonDao.getUserByUserId(rs.getInt("bidderId")));
+		object.setPrice(rs.getInt("bidPrice"));
+		return object;
+	}
+
+	public List<Bid> getBids(int auctionId) {
+		String SQL = "select * from bids where auctionId = ?";
+		List<Bid> list = jdbcTemplateObject.query(SQL, this::mapRsToBid, new Object[] { auctionId });
+		return (list != null && !list.isEmpty()) ? list : null;
+	}
+
+	@Override
+	public Auction getAuction(int auctionId) {
+		String SQL = "select * from auction where auctionId = ?";
+		List<Auction> list = jdbcTemplateObject.query(SQL, this::mapRsToAuction, new Object[] { auctionId });
+		Auction auction = (list != null && !list.isEmpty()) ? list.get(0) : null;
+		if (auction != null) {
+			auction.setBids(getBids(auctionId));
+		}
+		return auction;
+	}
+
+	@Override
+	public boolean addBid(Bid bid) {
+		String SQL = "insert into bids(auctionId, bidderId, bidPrice) values(?, ?, ?)";
+		return jdbcTemplateObject.update(SQL,
+				new Object[] { bid.getAuctionId(), bid.getBidderId(), bid.getPrice() }) > 1 ? true : false;
+	}
+
+	@Override
+	public boolean makeTheDeal(int auctionId, int userId, double bidPrice) {
+		String SQL = "update auction set buyerId=?, buyPrice=?, status=? where auctionId=?";
+		return jdbcTemplateObject.update(SQL, new Object[] { userId, bidPrice, 0, auctionId }) > 1 ? true : false;
 	}
 }

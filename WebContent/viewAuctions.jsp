@@ -1,11 +1,26 @@
+
+<%@page import="org.pk.ecommerce.auction.Auction"%>
+<%@page import="org.pk.ecommerce.entities.product.Product"%>
+<%@page import="org.pk.ecommerce.entities.product.SubCategory"%>
+<%@page import="org.pk.ecommerce.dao.CustomerDao"%>
+<%@page import="org.springframework.beans.factory.annotation.Autowired"%>
+<%@page
+	import="org.springframework.web.context.support.SpringBeanAutowiringSupport"%>
+<%@page import="org.pk.ecommerce.entities.product.Category"%>
+<%@page import="java.util.List"%>
 <%@page import="org.pk.ecommerce.GlobalConstants"%>
 <%@page import="org.pk.ecommerce.entities.user.User"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
+<%!public void jspInit() {
+		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, getServletContext());
+	}
 
+	@Autowired
+	private CustomerDao customerDao;%>
 <%
 User user = (User) session.getAttribute(GlobalConstants.USER_DETAILS);
-String message = request.getParameter("message");
+List<Auction> auctions = customerDao.getAllAuctionsThanLoggedInId(user.getUserId());
 %>
 
 <!DOCTYPE html>
@@ -15,7 +30,7 @@ String message = request.getParameter("message");
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-<title>Feedback Form | Online Agree Pet Zone</title>
+<title>View Auctions | Online Agree Pet Zone</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <link href="css/prettyPhoto.css" rel="stylesheet">
@@ -38,11 +53,9 @@ String message = request.getParameter("message");
 	href="images/ico/apple-touch-icon-57-precomposed.png">
 </head>
 <!--/head-->
-
 <body>
 	<header id="header">
 		<!--header-->
-
 		<div class="header-middle">
 			<!--header-middle-->
 			<div class="container">
@@ -62,18 +75,19 @@ String message = request.getParameter("message");
 								<%
 								if (user == null) {
 								%>
-								<li><a href="login.jsp"><i class="fa fa-lock"></i>
-										Login</a></li>
+								<li><a href="login.jsp"><i class="fa fa-lock"></i>Login</a></li>
 								<%
 								} else {
 								%>
-								<li><a href="startAuction.jsp"><i class="fa fa-shop"></i>Start Auction</a></li>
-								<li><a href="myAuctions.jsp"><i class="fa fa-shop"></i>My Auction</a></li>
+								<li><a href="startAuction.jsp"><i class="fa fa-shop"></i>Start
+										Auction</a></li>
+								<li><a href="myAuctions.jsp"><i class="fa fa-shop"></i>My
+										Auctions</a></li>
 								<li><a href="addProduct.jsp"><i class="fa fa-shop"></i>Add
 										Product</a></li>
 								<li><a href="orders.jsp"><i class="fa fa-shop"></i>Orders</a></li>
-								<li><a href="login.jsp"><i class="fa fa-lock"></i> Log
-										out</a></li>
+								<li><a href="submitFeedback.jsp"><i class="fa fa-lock"></i>Feedback</a></li>
+								<li><a href="login.jsp"><i class="fa fa-lock"></i>Logout</a></li>
 								<%
 								}
 								%>
@@ -84,89 +98,52 @@ String message = request.getParameter("message");
 			</div>
 		</div>
 		<!--/header-middle-->
-
-		<div class="header-bottom">
-			<!--header-bottom-->
-			<div class="container">
-				<div class="row">
-					<div class="col-sm-9">
-						<div class="navbar-header">
-							<button type="button" class="navbar-toggle"
-								data-toggle="collapse" data-target=".navbar-collapse">
-								<span class="sr-only">Toggle navigation</span> <span
-									class="icon-bar"></span> <span class="icon-bar"></span> <span
-									class="icon-bar"></span>
-							</button>
-						</div>
-						<div class="mainmenu pull-left">
-							<ul class="nav navbar-nav collapse navbar-collapse">
-								<li><a href="index.jsp">Home</a></li>
-								<li class="dropdown"><a href="#">Shop<i
-										class="fa fa-angle-down"></i></a>
-									<ul role="menu" class="sub-menu">
-										<li><a href="index.jsp">Product List</a></li>
-										<!-- <li><a href="checkout.jsp">Checkout</a></li> -->
-										<li><a href="cart.jsp">Cart</a></li>
-										<li>
-											<%
-											if (user == null) {
-											%> <a href="login.jsp"> Login</a> <%
- } else {
- %> <a href="login.jsp"> Log out</a> <%
- }
- %>
-										</li>
-									</ul>
-								<li><a href="contact-us.jsp">Contact</a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!--/header-bottom-->
 	</header>
 	<!--/header-->
 
 	<section>
 		<div class="container">
-			<div class="row">
-				<div class="col-md-4 col-md-offset-4">
-					<%
-					if (message != null) {
-					%>
-					<span style="font-size: 20px"><%=message%></span>
-					<%
-					}
-					%>
-				</div>
-			</div>
-			<div class="row">
+			<div class="row" style="padding-top: 20px">
 				<div class="col-sm-12">
-					<div class="product-information">
-						<div class="login-form">
-							<!--login form-->
-							<h2>Submit your Feedback</h2>
-							<form action="common?action=submitFeedback" method="post">
-								<textarea rows="4" cols="5" placeholder="Submit your feedback"
-									name="feedback"></textarea>
-								<button type="submit" class="btn btn-default">Submit</button>
-							</form>
+					<div class="features_items">
+						<h2 class="title text-center">Auctions</h2>
+						<%
+						if (auctions != null && !auctions.isEmpty()) {
+							for (Auction auction : auctions) {
+								Product product = auction.getProduct();
+						%>
+						<div class="col-sm-2">
+							<div class="product-image-wrapper">
+								<div class="single-products">
+									<div class="productinfo text-center" style="margin: 5px">
+										<img
+											src="<%=request.getContextPath() + "/" + product.getImageNamePath()%>"
+											alt="<%=product.getProductName()%>" height="100" width="100" />
+										<p><%=product.getProductName()%></p>
+										<p><%=product.getDescription()%></p>
+										<h2><%=product.getPrice()%></h2>
+										<a href="viewBids.jsp?auctionId=<%=auction.getAuctionId()%>">
+											View Bids</a>
+									</div>
+								</div>
+							</div>
 						</div>
+						<%
+						}
+						}
+						%>
 					</div>
+					<!--features_items-->
 				</div>
 			</div>
-			<!--/product-details-->
 		</div>
 	</section>
-
-	<%@ include file="footer.jsp"%>
+	<%@include file="footer.jsp"%>
 	<!--/Footer-->
-
 	<script src="js/jquery.js"></script>
-	<script src="js/price-range.js"></script>
-	<script src="js/jquery.scrollUp.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.scrollUp.min.js"></script>
+	<script src="js/price-range.js"></script>
 	<script src="js/jquery.prettyPhoto.js"></script>
 	<script src="js/main.js"></script>
 </body>

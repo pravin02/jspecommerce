@@ -22,6 +22,59 @@ CREATE DATABASE /*!32312 IF NOT EXISTS*/ ecommerce;
 USE ecommerce;
 
 --
+-- Table structure for table `ecommerce`.`auction`
+--
+
+DROP TABLE IF EXISTS `auction`;
+CREATE TABLE `auction` (
+  `auctionId` int(10) unsigned NOT NULL auto_increment,
+  `sellerId` int(10) unsigned NOT NULL default '0',
+  `buyerId` int(10) unsigned NOT NULL default '0',
+  `productId` int(10) unsigned NOT NULL default '0',
+  `price` varchar(15) NOT NULL default '',
+  `buyPrice` varchar(15) NOT NULL default '',
+  `status` tinyint(1) NOT NULL default '1',
+  PRIMARY KEY  (`auctionId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `ecommerce`.`auction`
+--
+
+/*!40000 ALTER TABLE `auction` DISABLE KEYS */;
+INSERT INTO `auction` (`auctionId`,`sellerId`,`buyerId`,`productId`,`price`,`buyPrice`,`status`) VALUES 
+ (1,2,2,6,'1000.0','8000.0',0),
+ (2,5,0,8,'20000.0','',1);
+/*!40000 ALTER TABLE `auction` ENABLE KEYS */;
+
+
+--
+-- Table structure for table `ecommerce`.`bids`
+--
+
+DROP TABLE IF EXISTS `bids`;
+CREATE TABLE `bids` (
+  `bidId` int(10) unsigned NOT NULL auto_increment,
+  `auctionId` int(10) unsigned NOT NULL default '0',
+  `bidderId` int(10) unsigned NOT NULL default '0',
+  `bidPrice` varchar(45) NOT NULL default '',
+  PRIMARY KEY  (`bidId`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `ecommerce`.`bids`
+--
+
+/*!40000 ALTER TABLE `bids` DISABLE KEYS */;
+INSERT INTO `bids` (`bidId`,`auctionId`,`bidderId`,`bidPrice`) VALUES 
+ (1,2,2,'7000.0'),
+ (2,2,2,'1000.0'),
+ (3,2,2,'20.0'),
+ (4,1,5,'8000.0');
+/*!40000 ALTER TABLE `bids` ENABLE KEYS */;
+
+
+--
 -- Table structure for table `ecommerce`.`feedback`
 --
 
@@ -71,8 +124,9 @@ CREATE TABLE `product` (
 
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
 INSERT INTO `product` (`productId`,`subCategoryId`,`productName`,`companyName`,`imageNamePath`,`price`,`quantity`,`discount`,`description`,`isDeleted`) VALUES 
- (1,1,'Buffalo 1','buffalo','images/pets/buffalo1.jpg',80000,1,0,'new breed',0),
- (2,2,'Buffalo 2','Buffalo','images/pets/buffalo2.jpg',100000,1,0,'new breed',0);
+ (6,1,'Gir Cow','GIR','images/pets/Screenshot (3).png',1000,1,0,'test product',0),
+ (7,2,'Red Sindhi Cow','RSC','images/pets/Screenshot (4).png',1000,1,0,'							',0),
+ (8,4,'Buffalo','new','images/pets/Screenshot (4).png',10000,1,0,'							',0);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 
 
@@ -145,11 +199,6 @@ CREATE TABLE `purchasedetails` (
 --
 
 /*!40000 ALTER TABLE `purchasedetails` DISABLE KEYS */;
-INSERT INTO `purchasedetails` (`purchaseDetailId`,`purchaseMasterId`,`productId`,`quantity`,`price`) VALUES 
- (1,3,1,1,80000),
- (2,4,2,1,100000),
- (3,5,1,1,80000),
- (4,5,2,2,100000);
 /*!40000 ALTER TABLE `purchasedetails` ENABLE KEYS */;
 
 
@@ -174,10 +223,6 @@ CREATE TABLE `purchasemaster` (
 --
 
 /*!40000 ALTER TABLE `purchasemaster` DISABLE KEYS */;
-INSERT INTO `purchasemaster` (`purchaseMasterId`,`userId`,`shippingAddress`,`purchaseDate`,`driverId`,`contact`,`status`) VALUES 
- (3,2,'Hadapsar, Sasane Nagar, 411028, Maharashtra','2022-02-07 17:45:28',3,'07276622442','Driver Assigned'),
- (4,2,'Hadapsar, Sasane Nagar, 411028, Maharashtra','2022-02-07 17:48:43',0,'07276622442','Order Placed'),
- (5,2,'Hadapsar, Sasane Nagar, 424201, Maharashtra','2022-02-07 17:49:34',0,'7276622442','Order Placed');
 /*!40000 ALTER TABLE `purchasemaster` ENABLE KEYS */;
 
 

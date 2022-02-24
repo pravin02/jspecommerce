@@ -19,6 +19,8 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.pk.ecommerce.GlobalConstants;
+import org.pk.ecommerce.auction.Auction;
+import org.pk.ecommerce.auction.Bid;
 import org.pk.ecommerce.dao.CustomerDao;
 import org.pk.ecommerce.entities.order.PurchaseDetail;
 import org.pk.ecommerce.entities.order.PurchaseMaster;
@@ -55,21 +57,54 @@ public class EcommerceServlet extends HttpServlet {
 		SpringBeanAutowiringSupport.processInjectionBasedOnServletContext(this, config.getServletContext());
 	}
 
+	@Override
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String action = request.getParameter("action");
+		if ("purchaseProduct".equalsIgnoreCase(action.trim())) {
+			this.purchaseProduct(request, response);
+		} else if ("assignDriver".equalsIgnoreCase(action)) {
+			this.assignDriver(request, response);
+		} else if ("updateOrderStatus".equals(action)) {
+			this.updateOrderStatus(request, response);
+		} else if ("addProduct".equals(action)) {
+			this.addProduct(request, response);
+		} else if ("startAuction".equals(action)) {
+			this.startAuction(request, response);
+		} else if ("addBid".equals(action)) {
+			this.addBid(request, response);
+		}
+	}
+
+	public void addBid(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		int auctionId = Integer.parseInt(request.getParameter("auctionId"));
+		int userId = ((User) request.getSession().getAttribute(GlobalConstants.USER_DETAILS)).getUserId();
+		double price = Double.parseDouble(request.getParameter("bidPrice"));
+		Bid bid = new Bid();
+		bid.setAuctionId(auctionId);
+		bid.setBidderId(userId);
+		bid.setPrice(price);
+		this.customerDao.addBid(bid);
+		response.sendRedirect("viewBids.jsp?auctionId=" + auctionId + "&message=Bid Registered successfully.");
+
+	}
+
+	public void startAuction(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		int productId = Integer.parseInt(request.getParameter("productId"));
+		double price = Double.parseDouble(request.getParameter("price"));
+		int userId = ((User) request.getSession().getAttribute(GlobalConstants.USER_DETAILS)).getUserId();
+
+		Auction auction = new Auction();
+		auction.setPrice(price);
+		auction.setSellerId(userId);
+		auction.setProductId(productId);
+		auction.setStatus(true);
+
+		this.customerDao.makeAuction(auction);
+		request.setAttribute("message", "Product Auctioned successfully.");
+		response.sendRedirect("startAuction.jsp");
+	}
+
 	/**
-	 * @Override public void doPost(HttpServletRequest request, HttpServletResponse
-	 *           response) throws ServletException, IOException { String action =
-	 *           request.getParameter("action"); if
-	 *           ("purchaseProduct".equalsIgnoreCase(action.trim())) {
-	 *           this.purchaseProduct(request, response); } else if
-	 *           ("assignDriver".equalsIgnoreCase(action)) {
-	 *           this.assignDriver(request, response); } else if
-	 *           ("updateOrderStatus".equals(action)) {
-	 *           this.updateOrderStatus(request, response); } else if
-	 *           ("addProduct".equals(action)) { this.addProduct(request, response);
-	 *           } }
-	 * 
-	 *           /**
-	 * 
 	 * @param request
 	 * @param response
 	 * @throws IOException

@@ -2,6 +2,8 @@ package org.pk.ecommerce.dao;
 
 import java.util.List;
 
+import org.pk.ecommerce.auction.Auction;
+import org.pk.ecommerce.auction.Bid;
 import org.pk.ecommerce.entities.order.PurchaseDetail;
 import org.pk.ecommerce.entities.order.PurchaseMaster;
 import org.pk.ecommerce.entities.product.Cart;
@@ -143,5 +145,17 @@ public interface CustomerDao {
 	List<Feedback> viewAllFeedbacks();
 
 	boolean updateOrderStatus(int orderId, String status);
+
+	public void makeAuction(Auction auction);
+
+	public Auction getAuction(int auctionId);
+
+	public List<Auction> getAllAuctionsThanLoggedInId(int userId);
+
+	public List<Auction> getAllAuctionsRaisedByMe(int userId);
+
+	public boolean addBid(Bid bid);
+
+	public boolean makeTheDeal(int auctionId, int userId, double bidPrice);
 
 }

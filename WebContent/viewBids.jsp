@@ -1,4 +1,6 @@
 
+<%@page import="org.pk.ecommerce.auction.Bid"%>
+<%@page import="org.pk.ecommerce.auction.Auction"%>
 <%@page import="org.pk.ecommerce.entities.product.Product"%>
 <%@page import="org.pk.ecommerce.entities.product.SubCategory"%>
 <%@page import="org.pk.ecommerce.dao.CustomerDao"%>
@@ -19,17 +21,16 @@
 	private CustomerDao customerDao;%>
 <%
 User user = (User) session.getAttribute(GlobalConstants.USER_DETAILS);
-
-List<Category> categories = customerDao.getAllCategories();
-
-List<Product> products = null;
-int subCategoryId = 1;
+int auctionId = 0;
+Auction auction = null;
 try {
-	if (request.getParameter("subCategoryId") != null)
-		subCategoryId = Integer.parseInt(request.getParameter("subCategoryId"));
-} finally {
-	products = customerDao.getAllProductList(subCategoryId, "", 0);
+	auctionId = Integer.parseInt(request.getParameter("auctionId"));
+	auction = this.customerDao.getAuction(auctionId);
+} catch (Exception e) {
+	System.err.println("ViewBids " + e.getMessage());
 }
+
+String message = (String) request.getParameter("message");
 %>
 
 <!DOCTYPE html>
@@ -39,7 +40,7 @@ try {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
-<title>Home | Online Agree Pet Zone</title>
+<title>View Auctions | Online Agree Pet Zone</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
 <link href="css/font-awesome.min.css" rel="stylesheet">
 <link href="css/prettyPhoto.css" rel="stylesheet">
@@ -75,8 +76,8 @@ try {
 					<div class="col-sm-8">
 						<div class="shop-menu pull-right">
 							<ul class="nav navbar-nav">
-								<li>
-								<a href="javascript:void(0)"><%=user.getFullName() %> (<%=user.getType().name() %>)</a></li>
+								<li><a href="javascript:void(0)"><%=user.getFullName()%>
+										(<%=user.getType().name()%>)</a></li>
 								<li><a href="userProfile.jsp"><i class="fa fa-user"></i>
 										Account</a></li>
 								<li><a href="cart.jsp"><i class="fa fa-shopping-cart"></i>
@@ -88,10 +89,12 @@ try {
 								<%
 								} else {
 								%>
-								<li><a href="startAuction.jsp"><i class="fa fa-shop"></i>Start Auction</a></li>
-								<li><a href="myAuctions.jsp"><i class="fa fa-shop"></i>My Auction</a></li>
-								<li><a href="viewAuctions.jsp"><i class="fa fa-shop"></i>View Auction</a></li>
-								<li><a href="addProduct.jsp"><i class="fa fa-shop"></i>Add Product</a></li>
+								<li><a href="startAuction.jsp"><i class="fa fa-shop"></i>Start
+										Auction</a></li>
+								<li><a href="myAuctions.jsp"><i class="fa fa-shop"></i>My
+										Auctions</a></li>
+								<li><a href="addProduct.jsp"><i class="fa fa-shop"></i>Add
+										Product</a></li>
 								<li><a href="orders.jsp"><i class="fa fa-shop"></i>Orders</a></li>
 								<li><a href="submitFeedback.jsp"><i class="fa fa-lock"></i>Feedback</a></li>
 								<li><a href="login.jsp"><i class="fa fa-lock"></i>Logout</a></li>
@@ -110,80 +113,69 @@ try {
 
 	<section>
 		<div class="container">
-			<div class="row" style="padding-top: 20px">
-				<div class="col-sm-3">
-					<div class="left-sidebar">
-						<h2>Category</h2>
-						<div class="panel-group category-products" id="accordian">
-							<!--category-productsr-->
-							<%
-							if (categories != null && !categories.isEmpty()) {
-								for (Category category : categories) {
-							%>
-							<div class="panel panel-default">
-								<div class="panel-heading">
-									<h4 class="panel-title">
-										<a data-toggle="collapse" data-parent="#accordian"
-											href="#subCate<%=category.getCategoryId()%>"> <span
-											class="badge pull-right"><i class="fa fa-plus"></i></span> <%=category.getCategoryName()%>
-										</a>
-									</h4>
-								</div>
-								<div id="subCate<%=category.getCategoryId()%>"
-									class="panel-collapse collapse">
-									<div class="panel-body">
-										<ul>
-											<%
-											if (category.getSubCategories() != null && !category.getSubCategories().isEmpty()) {
-												for (SubCategory subCategory : category.getSubCategories()) {
-											%>
-											<a
-												href="index.jsp?subCategoryId=<%=subCategory.getSubCategoryId()%>">
-												<li><%=subCategory.getSubCategoryName()%></li>
-											</a>
-											<%
-											}
-											}
-											%>
-										</ul>
-									</div>
-								</div>
-							</div>
-							<%
-							}
-							}
-							%>
-						</div>
-					</div>
+			<div class="row">
+				<div class="col-sm-12">
+					<%=message != null ? message : ""%>
 				</div>
-				<div class="col-sm-9 padding-right">
+			</div>
+			<div class="row" style="padding-top: 20px">
+				<div class="col-sm-12">
 					<div class="features_items">
-						<h2 class="title text-center">Pets</h2>
+						<h2 class="title text-center">Auction</h2>
 						<%
-						if (products != null && !products.isEmpty()) {
-							for (Product product : products) {
+						if (auction != null) {
+							Product product = auction.getProduct();
 						%>
-						<div class="col-sm-4">
+						<div class="col-sm-3">
 							<div class="product-image-wrapper">
-								<div class="single-products" style="border: solid 1px">
-									<div class="productinfo text-center" style="margin: 5px">										
-										<img
-											src="<%=request.getContextPath() + "/" + product.getImageNamePath()%>"
-											alt="<%=product.getProductName()%>" />
-										<p><%=product.getProductName()%></p>
-										<p><%=product.getDescription()%></p>
-										<h2><%=product.getPrice()%></h2>
-										<a
-											href="product-details.jsp?productId=<%=product.getProductId()%>"
-											class="btn btn-default add-to-cart"> <i
-											class="fa fa-shopping-cart"></i>Add to cart
-										</a>
+								<form action="ecommerce?action=addBid&auctionId=<%=auctionId%>"
+									method="post">
+									<div class="single-products">
+										<div class="productinfo text-center" style="margin: 5px">
+											<img
+												src="<%=request.getContextPath() + "/" + product.getImageNamePath()%>"
+												alt="<%=product.getProductName()%>" height="100" width="100" />
+											<p><%=product.getProductName()%></p>
+											<p><%=product.getDescription()%></p>
+											<h2><%=product.getPrice()%></h2>
+											<%
+											if ((auction.getSellerId() == user.getUserId()) && auction.getStatus()) {
+											%>
+											<h2>
+												<input type="text" name="bidPrice" class="form-control"
+													placeholder="Enter Bid Price">
+											</h2>
+											<button type="submit" class="btn btn-default add-to-cart">
+												Post Bid</button>
+											<%
+											}
+											%>
+										</div>
 									</div>
-								</div>
+								</form>
 							</div>
 						</div>
+						<div class="col-sm-9">
+							<ul class="list-group">
+								<%
+								List<Bid> bids = auction.getBids();
+								if (bids != null && !bids.isEmpty()) {
+									for (Bid bid : bids) {
+								%>
+								<li class="list-group-item">Bidder - <%=bid.getBidder().getFullName()%>
+									<br /> Bid Price - <%=bid.getPrice()%> <br /> <%
+ if ((auction.getSellerId() == user.getUserId()) && auction.getStatus()) {
+ %> <a href="makeTheDeal.jsp?auctionId=<%=auctionId %>&bidId=<%=bid.getBidId() %>&bidPrice=<%=bid.getPrice() %>" class="btn btn-danger">Make Deal</a> <%
+ }
+ %>
+								</li>
+								<%
+								}
+								}
+								%>
+							</ul>
+						</div>
 						<%
-						}
 						}
 						%>
 					</div>
