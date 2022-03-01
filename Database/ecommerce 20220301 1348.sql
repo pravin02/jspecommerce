@@ -43,8 +43,8 @@ CREATE TABLE `auction` (
 
 /*!40000 ALTER TABLE `auction` DISABLE KEYS */;
 INSERT INTO `auction` (`auctionId`,`sellerId`,`buyerId`,`productId`,`price`,`buyPrice`,`status`) VALUES 
- (1,2,2,6,'1000.0','8000.0',0),
- (2,5,0,8,'20000.0','',1);
+ (5,2,2,6,'1000.0','600.0',1),
+ (6,5,0,8,'5000.0','',0);
 /*!40000 ALTER TABLE `auction` ENABLE KEYS */;
 
 
@@ -67,10 +67,8 @@ CREATE TABLE `bids` (
 
 /*!40000 ALTER TABLE `bids` DISABLE KEYS */;
 INSERT INTO `bids` (`bidId`,`auctionId`,`bidderId`,`bidPrice`) VALUES 
- (1,2,2,'7000.0'),
- (2,2,2,'1000.0'),
- (3,2,2,'20.0'),
- (4,1,5,'8000.0');
+ (7,5,5,'600.0'),
+ (8,6,2,'500.0');
 /*!40000 ALTER TABLE `bids` ENABLE KEYS */;
 
 

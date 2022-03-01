@@ -16,6 +16,10 @@ Pending fuctionalities
 	ii) Checkout Order
 	iii) View Order & status
 	iv) Add products
+	v) Start New Auction
+	vi) View Own auctions
+	vii) View other auctions so can add bid and can view other bids too
+	viii) view received bid on own and other auction
 	
 	
 2) Admin
