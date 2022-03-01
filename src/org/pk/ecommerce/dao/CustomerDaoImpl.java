@@ -581,6 +581,6 @@ public class CustomerDaoImpl implements CustomerDao {
 	@Override
 	public boolean makeTheDeal(int auctionId, int userId, double bidPrice) {
 		String SQL = "update auction set buyerId=?, buyPrice=?, status=? where auctionId=?";
-		return jdbcTemplateObject.update(SQL, new Object[] { userId, bidPrice, 0, auctionId }) > 1 ? true : false;
+		return jdbcTemplateObject.update(SQL, new Object[] { userId, bidPrice, 1, auctionId }) > 1 ? true : false;
 	}
 }

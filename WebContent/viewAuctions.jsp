@@ -106,13 +106,13 @@ List<Auction> auctions = customerDao.getAllAuctionsThanLoggedInId(user.getUserId
 			<div class="row" style="padding-top: 20px">
 				<div class="col-sm-12">
 					<div class="features_items">
-						<h2 class="title text-center">Auctions</h2>
+						<h2 class="title text-center">View Auctions</h2>
 						<%
 						if (auctions != null && !auctions.isEmpty()) {
 							for (Auction auction : auctions) {
 								Product product = auction.getProduct();
 						%>
-						<div class="col-sm-2">
+						<div class="col-sm-3">
 							<div class="product-image-wrapper">
 								<div class="single-products">
 									<div class="productinfo text-center" style="margin: 5px">
@@ -122,6 +122,19 @@ List<Auction> auctions = customerDao.getAllAuctionsThanLoggedInId(user.getUserId
 										<p><%=product.getProductName()%></p>
 										<p><%=product.getDescription()%></p>
 										<h2><%=product.getPrice()%></h2>
+										<%
+											if (auction.getStatus()) {
+											%>
+											<h2>
+												Deal Price -
+												<%=auction.getBuyPrice()%></h2>
+											<h2>
+												Buyer -
+												<%=auction.getBuyer().getFullName()%></h2>
+											<%
+											}
+											%>
+										
 										<a href="viewBids.jsp?auctionId=<%=auction.getAuctionId()%>">
 											View Bids</a>
 									</div>

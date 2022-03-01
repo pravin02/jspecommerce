@@ -139,7 +139,20 @@ String message = (String) request.getParameter("message");
 											<p><%=product.getDescription()%></p>
 											<h2><%=product.getPrice()%></h2>
 											<%
-											if ((auction.getSellerId() == user.getUserId()) && auction.getStatus()) {
+											if (auction.getStatus()) {
+											%>
+											<h2>
+												Deal Price -
+												<%=auction.getBuyPrice()%></h2>
+											<h2>
+												Buyer -
+												<%=auction.getBuyer().getFullName()%></h2>
+											<%
+											}
+											%>
+
+											<%
+											if ((auction.getSellerId() != user.getUserId()) && !auction.getStatus()) {
 											%>
 											<h2>
 												<input type="text" name="bidPrice" class="form-control"
@@ -164,8 +177,10 @@ String message = (String) request.getParameter("message");
 								%>
 								<li class="list-group-item">Bidder - <%=bid.getBidder().getFullName()%>
 									<br /> Bid Price - <%=bid.getPrice()%> <br /> <%
- if ((auction.getSellerId() == user.getUserId()) && auction.getStatus()) {
- %> <a href="makeTheDeal.jsp?auctionId=<%=auctionId %>&bidId=<%=bid.getBidId() %>&bidPrice=<%=bid.getPrice() %>" class="btn btn-danger">Make Deal</a> <%
+ if ((auction.getSellerId() == user.getUserId()) && !auction.getStatus()) {
+ %> <a
+									href="makeTheDeal.jsp?auctionId=<%=auctionId%>&bidId=<%=bid.getBidId()%>&bidPrice=<%=bid.getPrice()%>"
+									class="btn btn-danger">Make Deal</a> <%
  }
  %>
 								</li>

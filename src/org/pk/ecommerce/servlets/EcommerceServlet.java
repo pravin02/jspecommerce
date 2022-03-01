@@ -97,7 +97,7 @@ public class EcommerceServlet extends HttpServlet {
 		auction.setPrice(price);
 		auction.setSellerId(userId);
 		auction.setProductId(productId);
-		auction.setStatus(true);
+		auction.setStatus(false);
 
 		this.customerDao.makeAuction(auction);
 		request.setAttribute("message", "Product Auctioned successfully.");
