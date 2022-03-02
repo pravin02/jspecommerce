@@ -21,7 +21,7 @@ public class CommonServlet extends HttpServlet {
 
 	@Autowired
 	private CommonDao commonDao;
-
+	
 	public CommonServlet() {
 		super();
 	}

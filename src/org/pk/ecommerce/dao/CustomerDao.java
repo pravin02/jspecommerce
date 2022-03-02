@@ -54,6 +54,8 @@ public interface CustomerDao {
 	 * @return
 	 */
 	List<Product> getAllProductList(int subCategoryId, String productName, double priceRange);
+	
+	List<Product> getAllProductList();
 
 	/**
 	 * @param productId

@@ -25,10 +25,14 @@ List<Category> categories = customerDao.getAllCategories();
 List<Product> products = null;
 int subCategoryId = 1;
 try {
-	if (request.getParameter("subCategoryId") != null)
+	if (request.getParameter("subCategoryId") != null){
 		subCategoryId = Integer.parseInt(request.getParameter("subCategoryId"));
-} finally {
-	products = customerDao.getAllProductList(subCategoryId, "", 0);
+	products = customerDao.getAllProductList(subCategoryId, "", 0.0);
+	} else {
+		products = customerDao.getAllProductList();	
+	}
+} catch (Exception e) {
+	products = customerDao.getAllProductList();
 }
 %>
 
@@ -115,7 +119,7 @@ try {
 					<div class="left-sidebar">
 						<h2>Category</h2>
 						<div class="panel-group category-products" id="accordian">
-							<!--category-productsr-->
+							<!--category-products-->
 							<%
 							if (categories != null && !categories.isEmpty()) {
 								for (Category category : categories) {

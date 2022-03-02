@@ -151,6 +151,29 @@ public class CustomerDaoImpl implements CustomerDao {
 		// return jdbcTemplateObject.update("") == 1 ? true: false;
 		return (list != null && !list.isEmpty()) ? list : null;
 	}
+	
+	@Override
+	public List<Product> getAllProductList() {
+		String SQL = "select * from product";
+		List<Product> list = jdbcTemplateObject.query(SQL, new RowMapper<Product>() {
+			@Override
+			public Product mapRow(java.sql.ResultSet rs, int rowMap) throws SQLException {
+				Product object = new Product();
+				object.setProductId(rs.getInt("productId"));
+				object.setProductName(rs.getString("productName"));
+				object.setPrice(rs.getDouble("price"));
+				object.setImageNamePath(rs.getString("imageNamePath"));
+				object.setQuantity(rs.getInt("quantity"));
+				object.setDiscount(rs.getDouble("discount"));
+				object.setDescription(rs.getString("description"));
+
+				return object;
+			}
+		});
+
+		// return jdbcTemplateObject.update("") == 1 ? true: false;
+		return (list != null && !list.isEmpty()) ? list : null;
+	}
 
 	/*
 	 * (non-Javadoc)
